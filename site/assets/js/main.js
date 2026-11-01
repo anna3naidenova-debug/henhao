@@ -163,34 +163,37 @@
     }
   }
 
-  /* ---------- 7.6 Световое меню ---------- */
-  var cur = (S.currency && S.currency.main) || "¥";
-  var lock = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 7V5a4 4 0 1 1 8 0v2h1v8H3V7h1Zm2 0h4V5a2 2 0 1 0-4 0v2Z" fill="currentColor"/></svg>';
-  var menu = $("#menu");
-  if (menu) menu.innerHTML = (S.tariffs || []).map(function (t) {
-    var off = !t.available;
-    var showPrice = !off || F.showIntensivePrice;
-    var price = "";
-    if (showPrice) {
-      price = '<p class="price"><span class="price__plate">' + fmtPrice(t.price) + " " + cur + ' <small>в месяц</small></span>' +
-        (S.currency && S.currency.showRub && t.priceRub ? ' <span class="price__next">≈ ' + fmtPrice(t.priceRub) + " " + S.currency.rub + "</span>" : "") +
-        '<span class="price__cap">' + (off ? "ориентир цены" : "цена первого потока") + "</span>" +
-        (F.showStrikePrice && t.nextPrice ? '<span class="price__next">со следующего потока — <s>' + fmtPrice(t.nextPrice) + " " + cur + "</s></span>" : "") +
-        "</p>";
-    }
-    return '<article class="panel' + (off ? " panel--off" : "") + '" data-tariff="' + t.id + '">' +
-      (off ? '<span class="panel__soon">' + lock + "Скоро</span>" : "") +
+  /* ---------- 7.6 Световое меню: матрица «преподаватель × ритм» ---------- */
+  var cur = (S.currency && S.currency.main) || "₽";
+  var rows = [], cols = [];
+  (S.tariffs || []).forEach(function (t) {
+    if (t.teacherType === "native" && !F.showNative) return;
+    var r = rows.filter(function (x) { return x.type === t.teacherType; })[0];
+    if (!r) rows.push(r = { type: t.teacherType, name: t.name, items: {} });
+    if (cols.indexOf(t.rhythm) === -1) cols.push(t.rhythm);
+    r.items[t.rhythm] = t;
+  });
+  function panel(t) {
+    var price = '<p class="price"><span class="price__plate">' + fmtPrice(t.price) + " " + cur + '<small>/мес</small></span>' +
+      '<span class="price__cap">цена первого потока</span>' +
+      (F.showStrikePrice && t.nextPrice ? '<span class="price__next">со следующего потока — <s>' + fmtPrice(t.nextPrice) + " " + cur + "</s></span>" : "") +
+      "</p>";
+    return '<article class="panel" data-tariff="' + esc(t.id) + '">' +
       '<div class="panel__box"><span class="panel__menuno"><span lang="zh-Hans">' + esc(t.menuNo) + '</span><small lang="zh-Latn-pinyin">' + esc(t.menuPinyin || "") + "</small></span>" +
-      '<span class="panel__big" lang="zh-Hans" aria-hidden="true">' + esc(t.big || "") + "</span>" +
-      (off ? '<span class="panel__zzz" aria-hidden="true">z z z</span><img class="panel__sleep" src="assets/img/goose-sleepy.webp" width="212" height="274" alt="Гусь спит" loading="lazy">' : "") +
-      "</div>" +
-      '<div class="panel__body"><h3 class="panel__name">' + esc(t.name) + "</h3>" +
-      '<p class="panel__rhythm">' + esc(t.rhythm) + '</p><p class="panel__hours">' + esc(t.hoursPerMonth) + " ч в месяц</p>" + price +
-      (off
-        ? '<a class="btn btn--ghost js-cta" href="#form" data-cta="intensive_preorder" data-mode="preorder" data-tariff="' + t.id + '">Предзапись</a>'
-        : '<a class="btn js-cta" href="#form" data-cta="tariff_' + t.id + '" data-tariff="' + t.id + '">Выбрать</a>') +
+      '<span class="panel__big" lang="zh-Hans" aria-hidden="true">' + esc(String(t.menuNo).slice(-1)) + "</span></div>" +
+      '<div class="panel__body"><h4 class="vh">' + esc(t.name) + ", " + esc(t.rhythm) + "</h4>" + price +
+      (t.available ? '<a class="btn btn--sm js-cta" href="#form" data-cta="' + esc(t.id) + '">Выбрать</a>' : "") +
       "</div></article>";
-  }).join("");
+  }
+  var menu = $("#menu");
+  if (menu) {
+    menu.innerHTML = '<div class="matrix__corner" aria-hidden="true"></div>' +
+      cols.map(function (c) { return '<p class="matrix__col" aria-hidden="true">' + esc(c) + "</p>"; }).join("") +
+      rows.map(function (r) {
+        return '<h3 class="matrix__row">' + esc(r.name) + "</h3>" +
+          cols.map(function (c) { return r.items[c] ? panel(r.items[c]) : '<div class="matrix__empty"></div>'; }).join("");
+      }).join("");
+  }
 
   var check = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="3" fill="#CE403B"/><path d="M6 12.5 10 16l8-8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var inc = $("#includes");
@@ -252,39 +255,19 @@
     if (t) contactInput.placeholder = t.placeholder;
     contactInput.type = v === "phone" ? "tel" : "text";
   }
-  function syncOther(name, otherInput, trigger) {
-    var on = (form.querySelector('[name="' + name + '"]:checked') || {}).value;
-    var el = form.querySelector('[name="' + otherInput + '"]');
-    el.hidden = !(on && trigger.indexOf(on) !== -1);
-  }
   form.addEventListener("change", function (e) {
     var n = e.target.name;
     if (n === "contact_type") syncContact();
-    if (n === "tz") syncOther("tz", "tz_other", ["Другой"]);
-    if (n === "source") syncOther("source", "source_other", ["Чат экспатов", "Другое"]);
     var f = e.target.closest(".field"); if (f) f.classList.remove("is-invalid");
   });
   form.addEventListener("input", function (e) { var f = e.target.closest(".field"); if (f) f.classList.remove("is-invalid"); });
   syncContact();
 
-  function setMode(mode) {
-    form.elements["mode"].value = mode;
-    var pre = mode === "preorder";
-    $("#form-title").textContent = pre ? "Предзапись на интенсив" : "Запись на бесплатный тест на уровень";
-    $("#form-submit").textContent = pre ? "Оставить предзапись" : "Записаться на тест";
-  }
-  function setTariff(id) {
-    var r = form.querySelector('[name="tariff"][value="' + id + '"]');
-    if (r) r.checked = true;
-  }
-
   var formOpened = false;
   $$(".js-cta").forEach(function (a) {
     a.addEventListener("click", function () {
       form.elements["cta_source"].value = a.getAttribute("data-cta") || "direct";
-      setMode(a.getAttribute("data-mode") || "test");
-      if (a.getAttribute("data-tariff")) setTariff(a.getAttribute("data-tariff"));
-      goal(a.getAttribute("data-mode") === "preorder" ? "click_preorder" : "click_test");
+      if (!a.closest(".panel")) goal("click_manager");
       $("#form-success").hidden = true; form.hidden = false;
     });
   });
@@ -299,32 +282,19 @@
     if (!form.elements["name"].value.trim()) bad("name");
     if (form.elements["contact"].value.trim().length < 3) bad("contact");
     if (!checked("level").length) bad("level");
-    if (!checked("time").length) bad("time");
-    if (!checked("tz").length || (checked("tz")[0] === "Другой" && !form.elements["tz_other"].value.trim())) bad("tz");
-    if (!checked("goal").length) bad("goal");
     if (!form.elements["consent"].checked) bad("consent");
     if (first) { first.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); var inp = first.querySelector("input"); if (inp) inp.focus({ preventScroll: true }); }
     return ok;
   }
 
   function payload() {
-    var tariffId = checked("tariff")[0] || "";
-    var tariffLabel = ((FC.tariffs || []).filter(function (t) { return t.id === tariffId; })[0] || {}).label || "";
     var ctype = checked("contact_type")[0];
     var ctl = ((FC.contactTypes || []).filter(function (c) { return c.id === ctype; })[0] || {}).label || ctype;
-    var tz = checked("tz")[0] || "";
-    var src = checked("source")[0] || "";
     var p = {
-      mode: form.elements["mode"].value,
       name: form.elements["name"].value.trim(),
       contact: ctl + " " + form.elements["contact"].value.trim(),
       level: checked("level")[0] || "",
-      tariff: tariffLabel,
-      time: checked("time"),
-      timezone: tz === "Другой" ? "Другой: " + form.elements["tz_other"].value.trim() : tz,
       browser_tz: (function () { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { return ""; } })(),
-      goal: checked("goal")[0] || "",
-      source: src + (form.elements["source_other"].value.trim() && !form.elements["source_other"].hidden ? " — " + form.elements["source_other"].value.trim() : ""),
       cta_source: form.elements["cta_source"].value,
       website: form.elements["website"].value,
       elapsed: Math.round((Date.now() - startedAt) / 1000),
@@ -335,15 +305,10 @@
     return p;
   }
 
-  function success(mode) {
-    var pre = mode === "preorder";
-    $("#success-title").textContent = pre ? "Предзапись принята" : "Готово, ты записан на тест";
-    $("#success-text").textContent = pre
-      ? "Напишем, как только откроем интенсив."
-      : "Заявка принята — твой китайский уже собирают на складе. Напишем " + (S.replyTime || "в течение дня") + " туда, где тебе удобно.";
+  function success() {
     form.hidden = true;
     var s = $("#form-success"); s.hidden = false; s.focus();
-    goal(pre ? "submit_preorder" : "submit_test");
+    goal("submit_form");
   }
 
   form.addEventListener("submit", function (e) {
@@ -353,12 +318,12 @@
     var p = payload();
     var btn = $("#form-submit");
     // ловушка для ботов: тихо «принимаем», но не отправляем
-    if (p.website || p.elapsed < (FC.minFillSeconds || 4)) { success(p.mode); return; }
+    if (p.website || p.elapsed < (FC.minFillSeconds || 4)) { success(); return; }
     btn.disabled = true;
     var done = function () { btn.disabled = false; };
-    if (FC.demoMode) { setTimeout(function () { done(); success(p.mode); }, 500); return; }
+    if (FC.demoMode) { setTimeout(function () { done(); success(); }, 500); return; }
     fetch(FC.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); done(); success(p.mode); })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); done(); success(); })
       .catch(function () { done(); $("#form-error").hidden = false; });
   });
 

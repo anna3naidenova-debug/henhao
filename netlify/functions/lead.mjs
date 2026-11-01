@@ -2,7 +2,6 @@
 // Переменные окружения (Netlify → Site configuration → Environment variables):
 //   TELEGRAM_BOT_TOKEN — токен бота от @BotFather
 //   TELEGRAM_CHAT_ID   — id чата, куда слать заявки
-const MODES = { test: "тест на уровень", preorder: "предзапись на интенсив" };
 
 const clean = (v, max = 300) => String(v ?? "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, max);
 
@@ -27,23 +26,18 @@ export default async (req) => {
     .join(" / ");
 
   const lines = [
-    `Новая заявка: ${MODES[d.mode] || MODES.test}`,
+    "Новая заявка: связаться с менеджером",
     `Имя: ${clean(d.name, 100)}`,
     `Связь: ${clean(d.contact, 120)}`,
     `Уровень: ${clean(d.level)}`,
-    d.tariff && `Тариф: ${clean(d.tariff)}`,
-    `Время: ${(Array.isArray(d.time) ? d.time : [d.time]).map((t) => clean(t, 60)).join("; ")}`,
-    `Часовой пояс: ${clean(d.timezone)}${d.browser_tz ? ` (браузер: ${clean(d.browser_tz, 60)})` : ""}`,
-    `Цель: ${clean(d.goal)}`,
-    d.source && `Откуда: ${clean(d.source)}`,
-    utm && `UTM: ${utm}`,
     `Кнопка: ${clean(d.cta_source, 60)}`,
+    utm && `UTM: ${utm}`,
     `Время заявки: ${cnTime} (Китай)`
   ].filter(Boolean);
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chat = process.env.TELEGRAM_CHAT_ID;
-  console.log("lead", JSON.stringify(lines)); // копия в логах функции на случай сбоя бота
+  console.log("lead", JSON.stringify({ lines, browser_tz: clean(d.browser_tz, 60), page: clean(d.page, 200) })); // копия в логах функции на случай сбоя бота
   if (!token || !chat) return new Response("Bot is not configured", { status: 500 });
 
   const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
