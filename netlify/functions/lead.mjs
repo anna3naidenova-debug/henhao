@@ -13,7 +13,7 @@ export default async (req) => {
 
   // ловушка для ботов и слишком быстрое заполнение — молча отвечаем «ок»
   if (d.website || Number(d.elapsed) < 3) return Response.json({ ok: true });
-  if (!clean(d.name) || !clean(d.contact)) return new Response("Bad Request", { status: 400 });
+  if (!clean(d.name) || !clean(d.phone)) return new Response("Bad Request", { status: 400 });
 
   const sentAt = new Date(d.sent_at || Date.now());
   const cnTime = new Intl.DateTimeFormat("ru-RU", {
@@ -28,8 +28,9 @@ export default async (req) => {
   const lines = [
     "Новая заявка: связаться с менеджером",
     `Имя: ${clean(d.name, 100)}`,
-    `Связь: ${clean(d.contact, 120)}`,
-    `Уровень: ${clean(d.level)}`,
+    `E-mail: ${clean(d.email, 120)}`,
+    `Телефон: ${clean(d.phone, 80)}`,
+    d.telegram && `Telegram: ${clean(d.telegram, 80)}`,
     `Кнопка: ${clean(d.cta_source, 60)}`,
     utm && `UTM: ${utm}`,
     `Время заявки: ${cnTime} (Китай)`

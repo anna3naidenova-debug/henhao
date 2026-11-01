@@ -48,11 +48,11 @@ window.SITE = {
   kineticStepMs: 1200,
 
   contacts: {
-    telegram: "https://t.me/henhao_school",   // [заглушка]
-    telegramNick: "@henhao_school",           // [заглушка]
-    wechatId: "henhao_school",                // [заглушка]
-    wechatQr: null,                           // путь к картинке QR из WeChat, например "assets/img/wechat-qr.png"
-    email: "hello@henhao.school"              // [заглушка]
+    telegram: "https://t.me/naidenovaann",
+    telegramNick: "@naidenovaann",
+    wechatId: "henhaoschool",
+    wechatQr: "assets/img/wechat-qr.png",     // QR из WeChat
+    email: "hello@henhaoschool.ru"
   },
 
   // Яндекс Метрика: впишите номер счётчика, например 98765432. null — счётчик выключен.
@@ -64,12 +64,16 @@ window.SITE = {
     demoMode: true,
     endpoint: "/.netlify/functions/lead",
     minFillSeconds: 4,
-    contactTypes: [
-      { id: "telegram", label: "Telegram", placeholder: "@ник" },
-      { id: "wechat",   label: "WeChat",   placeholder: "WeChat ID" },
-      { id: "phone",    label: "Телефон",  placeholder: "+86 … или +7 …" }
-    ],
-    levels: ["Никогда не учил", "Немного знаю, примерно HSK1", "Примерно HSK2", "HSK3 и выше", "Не знаю, подскажите"]
+    // Коды стран для поля «Телефон». Первая строка — выбрана по умолчанию.
+    phoneCountries: [
+      { flag: "🇷🇺", name: "Россия",     code: "+7",   placeholder: "912 345-67-89" },
+      { flag: "🇨🇳", name: "Китай",      code: "+86",  placeholder: "131 2345 6789" },
+      { flag: "🇰🇿", name: "Казахстан",  code: "+7",   placeholder: "701 234-56-78" },
+      { flag: "🇧🇾", name: "Беларусь",   code: "+375", placeholder: "29 123-45-67" },
+      { flag: "🇺🇿", name: "Узбекистан", code: "+998", placeholder: "90 123-45-67" },
+      { flag: "🇰🇬", name: "Кыргызстан", code: "+996", placeholder: "555 123-456" },
+      { flag: "🌐", name: "Другая страна", code: "+",  placeholder: "код страны и номер" }
+    ]
   },
 
   challenges: [

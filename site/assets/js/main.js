@@ -238,30 +238,38 @@
   var params = new URLSearchParams(location.search);
   utmKeys.forEach(function (k) { if (params.get(k)) store.set(k, params.get(k)); });
 
-  $$("[data-chips]", form).forEach(function (box) {
-    var list = FC[box.getAttribute("data-chips")] || [];
-    var name = box.getAttribute("data-name"), type = box.getAttribute("data-type");
-    box.innerHTML = list.map(function (o, k) {
-      var val = typeof o === "string" ? o : o.id, label = typeof o === "string" ? o : o.label;
-      return '<label class="chip"><input type="' + type + '" name="' + name + '" value="' + esc(val) + '"' +
-        (name === "contact_type" && k === 0 ? " checked" : "") + "><span>" + esc(label) + "</span></label>";
-    }).join("");
+  // WeChat не открывается ссылкой — копируем ID и подсказываем
+  var wcBtn = $(".js-wechat", form), wcNote = $("#wechat-note");
+  var wcId = S.contacts && S.contacts.wechatId;
+  if (!wcId) wcBtn.hidden = true;
+  wcBtn.addEventListener("click", function () {
+    goal("click_wechat");
+    var qr = S.contacts && S.contacts.wechatQr;
+    wcNote.innerHTML = (qr ? '<img src="' + esc(qr) + '" width="160" height="157" alt="QR-код WeChat школы">' : "") +
+      '<span>Отсканируй QR в WeChat или добавь нас по ID: <b>' + esc(wcId) + "</b></span>";
+    wcNote.hidden = false;
+    if (navigator.clipboard) navigator.clipboard.writeText(wcId).then(function () {
+      $("span", wcNote).insertAdjacentHTML("beforeend", " — ID скопирован");
+    }, function () {});
   });
 
-  var contactInput = $("#f-contact");
-  function syncContact() {
-    var v = (form.querySelector('[name="contact_type"]:checked') || {}).value;
-    var t = (FC.contactTypes || []).filter(function (c) { return c.id === v; })[0];
-    if (t) contactInput.placeholder = t.placeholder;
-    contactInput.type = v === "phone" ? "tel" : "text";
+  // Телефон: код страны
+  var countries = FC.phoneCountries || [];
+  var countrySel = $("#f-country"), phoneInput = $("#f-phone");
+  countrySel.innerHTML = countries.map(function (c, k) {
+    return '<option value="' + k + '">' + esc(c.flag + " " + c.code) + "</option>";
+  }).join("");
+  $$("option", countrySel).forEach(function (o, k) { o.title = countries[k].name; });
+  function syncCountry() {
+    var c = countries[countrySel.value] || {};
+    phoneInput.placeholder = c.placeholder || "";
+    countrySel.setAttribute("aria-label", "Код страны: " + (c.name || ""));
   }
-  form.addEventListener("change", function (e) {
-    var n = e.target.name;
-    if (n === "contact_type") syncContact();
-    var f = e.target.closest(".field"); if (f) f.classList.remove("is-invalid");
-  });
+  countrySel.addEventListener("change", syncCountry);
+  syncCountry();
+
+  form.addEventListener("change", function (e) { var f = e.target.closest(".field"); if (f) f.classList.remove("is-invalid"); });
   form.addEventListener("input", function (e) { var f = e.target.closest(".field"); if (f) f.classList.remove("is-invalid"); });
-  syncContact();
 
   var formOpened = false;
   $$(".js-cta").forEach(function (a) {
@@ -280,20 +288,23 @@
     var ok = true, first = null;
     function bad(k) { ok = false; invalid(k); if (!first) first = form.querySelector('[data-err="' + k + '"]').closest(".field"); }
     if (!form.elements["name"].value.trim()) bad("name");
-    if (form.elements["contact"].value.trim().length < 3) bad("contact");
-    if (!checked("level").length) bad("level");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.elements["email"].value.trim())) bad("email");
+    if (form.elements["phone"].value.replace(/\D/g, "").length < 6) bad("phone");
     if (!form.elements["consent"].checked) bad("consent");
     if (first) { first.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); var inp = first.querySelector("input"); if (inp) inp.focus({ preventScroll: true }); }
     return ok;
   }
 
   function payload() {
-    var ctype = checked("contact_type")[0];
-    var ctl = ((FC.contactTypes || []).filter(function (c) { return c.id === ctype; })[0] || {}).label || ctype;
+    var c = countries[countrySel.value] || {};
+    var num = form.elements["phone"].value.trim();
+    var tgNick = form.elements["telegram"].value.trim();
+    if (tgNick && !/^[@+]|^https?:|t\.me/.test(tgNick)) tgNick = "@" + tgNick;
     var p = {
       name: form.elements["name"].value.trim(),
-      contact: ctl + " " + form.elements["contact"].value.trim(),
-      level: checked("level")[0] || "",
+      email: form.elements["email"].value.trim(),
+      phone: (c.code && c.code !== "+" ? c.code + " " : "") + num + (c.name ? " (" + c.name + ")" : ""),
+      telegram: tgNick,
       browser_tz: (function () { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { return ""; } })(),
       cta_source: form.elements["cta_source"].value,
       website: form.elements["website"].value,
