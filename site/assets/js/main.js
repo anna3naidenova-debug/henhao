@@ -239,18 +239,20 @@
   utmKeys.forEach(function (k) { if (params.get(k)) store.set(k, params.get(k)); });
 
   // WeChat не открывается ссылкой — копируем ID и подсказываем
-  var wcBtn = $(".js-wechat", form), wcNote = $("#wechat-note");
   var wcId = S.contacts && S.contacts.wechatId;
-  if (!wcId) wcBtn.hidden = true;
-  wcBtn.addEventListener("click", function () {
-    goal("click_wechat");
-    var qr = S.contacts && S.contacts.wechatQr;
-    wcNote.innerHTML = (qr ? '<img src="' + esc(qr) + '" width="160" height="157" alt="QR-код WeChat школы">' : "") +
-      '<span>Отсканируй QR в WeChat или добавь нас по ID: <b>' + esc(wcId) + "</b></span>";
-    wcNote.hidden = false;
-    if (navigator.clipboard) navigator.clipboard.writeText(wcId).then(function () {
-      $("span", wcNote).insertAdjacentHTML("beforeend", " — ID скопирован");
-    }, function () {});
+  $$(".js-wechat").forEach(function (wcBtn) {
+    var wcNote = $(".messengers__wechat", wcBtn.closest(".messengers"));
+    if (!wcId) wcBtn.hidden = true;
+    wcBtn.addEventListener("click", function () {
+      goal("click_wechat");
+      var qr = S.contacts && S.contacts.wechatQr;
+      wcNote.innerHTML = (qr ? '<img src="' + esc(qr) + '" width="160" height="157" alt="QR-код WeChat школы">' : "") +
+        '<span>Отсканируй QR в WeChat или добавь нас по ID: <b>' + esc(wcId) + "</b></span>";
+      wcNote.hidden = false;
+      if (navigator.clipboard) navigator.clipboard.writeText(wcId).then(function () {
+        $("span", wcNote).insertAdjacentHTML("beforeend", " — ID скопирован");
+      }, function () {});
+    });
   });
 
   // Телефон: код страны
@@ -272,11 +274,13 @@
   form.addEventListener("input", function (e) { var f = e.target.closest(".field"); if (f) f.classList.remove("is-invalid"); });
 
   var formOpened = false;
+  var formTitle = $("#form-title"), formTitleText = formTitle.textContent;
   $$(".js-cta").forEach(function (a) {
     a.addEventListener("click", function () {
       form.elements["cta_source"].value = a.getAttribute("data-cta") || "direct";
       if (!a.closest(".panel")) goal("click_manager");
       $("#form-success").hidden = true; form.hidden = false;
+      formTitle.textContent = formTitleText;
     });
   });
 
@@ -318,6 +322,7 @@
 
   function success() {
     form.hidden = true;
+    formTitle.textContent = "Заявка у нас, скоро напишем";
     var s = $("#form-success"); s.hidden = false; s.focus();
     goal("submit_form");
   }

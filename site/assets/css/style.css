@@ -273,7 +273,7 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .panel__menuno small { display: block; font-family: var(--f-body); font-weight: 500; font-size: 10px; color: var(--grey); }
 .panel__body { padding: 10px 0 0; display: flex; flex-direction: column; flex: 1; }
 .price { margin: 0; }
-.price__plate { display: inline-block; background: var(--red); color: var(--white); font-family: var(--f-head); font-weight: 800; font-size: 18px; padding: 6px 8px; line-height: 1.1; white-space: nowrap; }
+.price__plate { display: inline-block; color: var(--white); font-family: var(--f-head); font-weight: 800; font-size: 18px; line-height: 1.1; white-space: nowrap; }
 .price__plate small { font-size: 11px; font-weight: 600; margin-left: 2px; }
 .price__cap { display: block; font-size: 12px; color: #a8a8a8; margin-top: 5px; }
 .price__next { display: block; font-size: 12px; color: #cfcfcf; margin-top: 2px; }
@@ -286,7 +286,7 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 @media (min-width: 640px) {
   .matrix { gap: 14px; }
   .matrix__col { font-size: 18px; }
-  .price__plate { font-size: 22px; padding: 6px 12px; }
+  .price__plate { font-size: 22px; }
   .price__plate small { font-size: 13px; }
 }
 @media (min-width: 900px) {
@@ -310,9 +310,7 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .includes li:nth-child(odd) { transform: rotate(-1deg); }
 .includes li:nth-child(even) { transform: rotate(1deg); }
 .includes svg { width: 22px; height: 22px; flex: none; }
-.menu__book { margin: 24px 0 0; font-family: var(--f-hand); font-size: 26px; color: var(--lamp); }
 /* ============ 7.7 ГРУППЫ ============ */
-.groups__goose { width: 180px; margin-top: 8px; }
 .boards { display: grid; gap: 14px; align-content: start; }
 .board { background: var(--black); color: var(--white); padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .board__city { font-weight: 600; font-size: 17px; }
@@ -435,7 +433,11 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .form-error { display: flex; gap: 12px; align-items: center; margin: 18px 0 0; padding: 14px; border: 2px solid var(--red-dark); color: var(--red-dark); font-weight: 600; }
 .form-error img { width: 64px; flex: none; }
 .success { padding: 40px 20px 48px; text-align: left; }
-.success img { width: 170px; margin-bottom: 16px; }
+.success .lead { margin-bottom: 0; }
+.success__row { display: flex; align-items: center; gap: 16px 24px; margin-top: 20px; }
+.success__goose { width: 120px; flex: none; order: 2; margin-left: auto; }
+.success__messengers { flex: 1; }
+@media (min-width: 600px) { .success__goose { width: 170px; } }
 .success:focus { outline: none; }
 @media (min-width: 900px) {
   .waybill__top { padding: 36px 40px 24px; }
