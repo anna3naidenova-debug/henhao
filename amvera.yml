@@ -1,0 +1,11 @@
+meta:
+  environment: node
+  toolchain:
+    name: npm
+    version: '22'
+build:
+  skip: yes
+run:
+  scriptName: server.mjs
+  containerPort: 80
+  persistenceMount: /data

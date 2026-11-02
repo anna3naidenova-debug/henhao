@@ -58,11 +58,11 @@ window.SITE = {
   // Яндекс Метрика: впишите номер счётчика, например 98765432. null — счётчик выключен.
   metrikaId: null,
 
-  // Форма. demoMode: true — заявки никуда не уходят, сразу показывается экран успеха (для просмотра локально).
-  // После деплоя на Netlify и настройки бота поставьте false.
+  // Форма. Сайт работает на Amvera: заявки принимает server.mjs по адресу /api/lead и пересылает в Telegram.
+  // demoMode: true — заявки никуда не уходят (только для просмотра локально). На сайте должно быть false.
   form: {
-    demoMode: true,
-    endpoint: "/.netlify/functions/lead",
+    demoMode: false,
+    endpoint: "/api/lead",
     minFillSeconds: 4,
     // Коды стран для поля «Телефон». Первая строка — выбрана по умолчанию.
     phoneCountries: [
