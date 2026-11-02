@@ -14,8 +14,9 @@ site/                    ← это и есть сайт (папка для пу
   assets/js/qrcode.js    генератор QR (MIT, лежит локально)
   assets/fonts/          шрифты-сабсеты woff2
   assets/img/            гуси, логотип, OG-картинка, фавиконы
-netlify/functions/lead.mjs  серверная функция: заявка → Telegram
-netlify.toml             настройки Netlify
+netlify/functions/lead.mjs  старая функция для Netlify (не используется, заявки принимает server.mjs)
+netlify.toml             настройки Netlify (не используются)
+server.mjs               сервер на Amvera: сайт + приём заявок → файл /data и Telegram
 tools/subset_fonts.py    пересборка шрифтов
 tools/fonts-src/         исходные шрифты (на сайт не попадают)
 tools/cutouts/           PNG-вырезки гусей и логотипа
@@ -33,7 +34,7 @@ python3 -m http.server 8000
 
 и открыть http://localhost:8000
 
-Пока в `site.config.js` стоит `form.demoMode: true`, форма никуда не отправляет заявки и сразу показывает экран успеха.
+Через `python3 -m http.server` форма не работает (нет `/api/lead`), для проверки формы запускайте `node server.mjs`, см. ниже. Если поставить `form.demoMode: true`, форма ничего не отправляет и сразу показывает экран успеха — на сайте так не оставлять.
 
 ## Как поменять цены, тексты, контакты
 
@@ -54,16 +55,15 @@ pip3 install fonttools brotli
 python3 tools/subset_fonts.py
 ```
 
-## Публикация на Netlify и заявки в Telegram
+## Где работает сайт и заявки в Telegram
 
-1. Создать бота у @BotFather в Telegram и получить токен.
-2. Написать боту любое сообщение, открыть `https://api.telegram.org/bot<ТОКЕН>/getUpdates` и найти там `"chat":{"id": …}` — это `chat_id`. Для группового чата: добавить бота в группу и сделать то же самое.
-3. Залить проект на Netlify (через GitHub или перетащив папку проекта целиком: нужен и `site/`, и `netlify/`, и `netlify.toml`).
-4. В Netlify: Site configuration → Environment variables. Добавить `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`.
-5. В `site/site.config.js` поставить `form.demoMode: false` и задеплоить ещё раз.
-6. Подключить свой домен: `*.netlify.app` в Китае часто не открывается. Затем заменить `example.com` в `site/robots.txt` и `site/sitemap.xml`, а в `index.html` сделать ссылку на `og:image` абсолютной (`https://домен/assets/img/og.png`), чтобы Telegram гарантированно показал превью.
+Сайт https://henhaoschool.ru размещён на Amvera и обновляется сам после каждого push в ветку `main` (подробно в `HOSTING.md`).
 
-Каждая заявка также пишется в логи функции (Netlify → Logs → Functions). Это запасная копия на случай сбоя бота.
+- Заявки формы принимает `server.mjs` по адресу `/api/lead`, сохраняет копию каждой заявки в файл `/data/leads.jsonl` на Amvera (раздел «Данные» проекта) и пересылает в Telegram.
+- Токен бота и chat id заданы в Amvera → «Переменные» (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`), в репозиторий их не добавлять.
+- В `site/site.config.js` у формы должно оставаться `demoMode: false` и `endpoint: "/api/lead"`.
+- Не удалять `server.mjs`, `package.json`, `amvera.yml`. Папка `netlify/` и `netlify.toml` не используются.
+- Локально форму можно проверить так: `PORT=8080 LEADS_FILE=/tmp/leads.jsonl node server.mjs` и открыть http://localhost:8080 (без переменных Telegram заявка только запишется в файл).
 
 ## Проверка перед запуском
 
