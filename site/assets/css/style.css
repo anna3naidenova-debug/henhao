@@ -121,6 +121,7 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .hero__grid { align-items: end; row-gap: 40px; }
 .hero__text .btn { margin-top: 8px; }
 .hero__text .lead { margin-top: 20px; }
+.hero__offer { display: block; margin-top: 8px; }
 
 .poster { position: relative; background: var(--frame); padding: 56px 14px 14px; margin-bottom: 40px; }
 .poster__red { position: relative; background: var(--red); aspect-ratio: 4 / 4.6; overflow: visible; display: flex; flex-direction: column; }
@@ -132,16 +133,17 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .skyline { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: auto; }
 /* башня выходит за верхний край красного блока */
 .tower { position: absolute; z-index: 1; bottom: 0; left: 66.7%; transform: translateX(-50%); height: 122%; width: auto; aspect-ratio: 88 / 420; }
-.poster__goose { position: absolute; z-index: 3; width: 30%; max-width: 170px; left: 4%; bottom: -36px; transform: rotate(-4deg); }
+.poster__goose { position: absolute; z-index: 3; width: 34%; max-width: 190px; left: 4%; bottom: -36px; transform: rotate(-4deg); }
 .poster__note { position: absolute; right: 4%; bottom: -40px; text-align: right; font-size: 22px; transform: rotate(-2deg); }
 
 @media (min-width: 900px) {
-  .hero { padding-top: 40px; }
+  .hero { padding-top: 24px; }
   .hero__grid { align-items: center; }
   .hero__text { grid-column: 1 / span 5; grid-row: 1; }
-  .hero__poster { grid-column: 6 / -1; grid-row: 1; }
-  .poster { padding: 80px 22px 22px; }
-  .poster__red { aspect-ratio: 4 / 3.8; }
+  .hero__poster { grid-column: 7 / -1; grid-row: 1; }
+  .poster { padding: 36px 18px 18px; margin-bottom: 28px; }
+  .poster__red { aspect-ratio: 4 / 3.7; }
+  .tower { height: 110%; }
   .poster__note { font-size: 26px; }
 }
 
