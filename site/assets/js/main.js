@@ -49,7 +49,62 @@
   /* ---------- Флаги блоков ---------- */
   var F = S.flags || {};
   if (F.showMeetup && S.meetup && S.meetup.date) $("#meetup").hidden = false;
-  if (F.showTeacher) $("#teacher").hidden = false;
+  var teacherSection = $("#teacher");
+  var teacherList = $("#teachers-list");
+  if (teacherSection && teacherList && F.showTeacher && (S.teachers || []).length) {
+    teacherList.innerHTML = S.teachers.map(function (t) {
+      var photo = t.photo ? '<img src="' + esc(t.photo) + '" alt="' + esc(t.name) + '" width="480" height="540" loading="lazy">' :
+        '<div class="teacher-card__placeholder"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><circle cx="50" cy="32" r="17"/><path d="M17 88v-7a33 33 0 0 1 66 0v7"/></svg><span>Фото скоро</span></div>';
+      return '<article class="teacher-card' + (t.highlight ? ' teacher-card--featured' : '') + '" data-teacher="' + esc(t.id) + '">' +
+        '<div class="teacher-card__photo">' + photo +
+        (t.highlight ? '<p class="teacher-card__highlight">' + esc(t.highlight) + '</p>' : '') + '</div>' +
+        '<div class="teacher-card__body"><h3 class="h3">' + esc(t.name) + '</h3>' +
+        '<p class="teacher-card__role">' + esc(t.role) + '</p>' +
+        '<p class="teacher-card__experience' + (t.experience ? '' : ' teacher-card__pending') + '">' + esc(t.experience || 'Опыт: скоро добавим') + '</p>' +
+        (t.credential ? '<p class="teacher-card__credential">' + esc(t.credential) + '</p>' : '') +
+        '<dl class="teacher-card__details"><div><dt>Объясняет</dt><dd>' + esc(t.language) + '</dd></div>' +
+        '<div><dt>Направления</dt><dd' + (t.groups ? '' : ' class="teacher-card__pending"') + '>' + esc(t.groups || 'Скоро добавим') + '</dd></div></dl>' +
+        (t.about ? '<button class="teacher-card__about" type="button" data-teacher-open="' + esc(t.id) + '" aria-haspopup="dialog" aria-controls="teacher-profile" aria-label="О преподавателе: ' + esc(t.name) + '">О преподавателе<span aria-hidden="true">→</span></button>' : '') +
+        '</div></article>';
+    }).join("");
+    teacherSection.hidden = false;
+  }
+
+  /* ---------- Подробности о преподавателе: боковая панель ---------- */
+  var teacherProfile = $("#teacher-profile");
+  var teacherProfileContent = $("#teacher-profile-content");
+  if (teacherList && teacherProfile && teacherProfileContent) {
+    var teacherTrigger = null;
+    teacherList.addEventListener("click", function (event) {
+      var trigger = event.target.closest("[data-teacher-open]");
+      if (!trigger || !teacherList.contains(trigger) || teacherProfile.open) return;
+      var teacher = (S.teachers || []).filter(function (t) { return t.id === trigger.getAttribute("data-teacher-open"); })[0];
+      if (!teacher || !teacher.about) return;
+      teacherProfileContent.innerHTML = '<div class="teacher-profile__head">' +
+        (teacher.photo ? '<img src="' + esc(teacher.photo) + '" alt="' + esc(teacher.name) + '" width="96" height="108">' : '') +
+        '<div><h2 class="h2" id="teacher-profile-title">' + esc(teacher.name) + '</h2><p>' + esc(teacher.role) + '</p></div></div>' +
+        '<p class="teacher-card__experience">' + esc(teacher.experience || '') + '</p>' +
+        (teacher.credential ? '<p>' + esc(teacher.credential) + '</p>' : '') +
+        '<dl class="teacher-card__details"><div><dt>Объясняет</dt><dd>' + esc(teacher.language) + '</dd></div>' +
+        '<div><dt>Направления</dt><dd>' + esc(teacher.groups || 'Скоро добавим') + '</dd></div></dl>' +
+        '<p class="teacher-profile__bio">' + esc(teacher.about) + '</p>' +
+        (teacher.advice ? '<p class="teacher-profile__advice"><b>Совет ученику</b>' + esc(teacher.advice) + '</p>' : '');
+      teacherTrigger = trigger;
+      teacherProfile.showModal();
+      teacherProfile.scrollTop = 0;
+      document.documentElement.classList.add("teacher-profile-open");
+    });
+    $(".teacher-profile__close", teacherProfile).addEventListener("click", function () { teacherProfile.close(); });
+    teacherProfile.addEventListener("click", function (event) {
+      if (event.target !== teacherProfile) return;
+      var rect = teacherProfile.getBoundingClientRect();
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) teacherProfile.close();
+    });
+    teacherProfile.addEventListener("close", function () {
+      document.documentElement.classList.remove("teacher-profile-open");
+      if (teacherTrigger && teacherTrigger.isConnected) teacherTrigger.focus({ preventScroll: true });
+    });
+  }
 
   /* ---------- QR-узор (декоративный, нарочно без «глазков» — не сканируется) ---------- */
   function rng(seed) { return function () { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }; }

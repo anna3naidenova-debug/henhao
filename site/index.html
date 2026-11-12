@@ -196,6 +196,20 @@
   </div>
 </section>
 
+<!-- ПРЕПОДАВАТЕЛИ -->
+<section class="section teachers" id="teacher" hidden>
+  <div class="wrap">
+    <h2 class="h2">С кем ты будешь учиться</h2>
+    <p class="lead">Носители и русскоязычные преподаватели. Выбирай, на каком языке тебе удобнее разбирать китайский</p>
+    <div class="teachers__grid" id="teachers-list"></div>
+  </div>
+</section>
+
+<dialog class="teacher-profile" id="teacher-profile" aria-labelledby="teacher-profile-title">
+  <button class="teacher-profile__close" type="button" aria-label="Закрыть описание преподавателя" autofocus>×</button>
+  <div id="teacher-profile-content"></div>
+</dialog>
+
 <!-- 7.6 ТАРИФЫ -->
 <section class="section menu" id="tariffs">
   <div class="wrap">
@@ -275,18 +289,6 @@
   <div class="wrap">
     <h2 class="h2">Встреча в Гуанчжоу</h2>
     <p class="lead">Ближайшая встреча — <span data-bind="meetup.date"></span>, <span data-bind="meetup.place"></span>. Для тех, кто живёт в Гуанчжоу</p>
-  </div>
-</section>
-
-<!-- 7.10 ПРЕПОДАВАТЕЛЬ (по флагу) -->
-<section class="section teacher" id="teacher" hidden>
-  <div class="wrap grid">
-    <img class="teacher__photo" data-bind-src="teacher.photo" alt="Преподаватель" loading="lazy">
-    <div>
-      <h2 class="h2">Объясняет по-русски</h2>
-      <p class="h3" data-bind="teacher.name"></p>
-      <p class="lead" data-bind="teacher.about"></p>
-    </div>
   </div>
 </section>
 

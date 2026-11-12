@@ -44,7 +44,7 @@ python3 -m http.server 8000
 - строка «со следующего потока — … ₽» — `flags.showStrikePrice` (`false` — скрыть);
 - тарифы «С носителем» — `flags.showNative`. Если носителя к запуску нет, поставьте `false` — обе карточки скроются;
 - блок встречи — `flags.showMeetup: true` и заполнить `meetup.date` и `meetup.place`;
-- блок преподавателя — `flags.showTeacher: true`, положить фото в `site/assets/img/teacher.jpg` и заполнить `teacher`;
+- блок преподавателей — `flags.showTeacher: true`, данные карточек в массиве `teachers`. Поля: `name`, `role`, `language`, `groups` (направления), `experience`, `photo`; `highlight` — акцент на фото, `credential` — образование или ключевая квалификация. Поля `about` и `advice` открываются в боковой панели по кнопке «О преподавателе». Фото положить в `site/assets/img/teachers/` и указать путь вроде `assets/img/teachers/shuo.jpg` в `photo`. Пустые фото, опыт и направления показывают заглушки;
 - QR из WeChat — положить картинку в `site/assets/img/wechat-qr.png` и вписать путь в `contacts.wechatQr`;
 - Яндекс Метрика — вписать номер счётчика в `metrikaId`. Цели, которые отправляет сайт: `click_manager` (кнопки «Связаться с менеджером»), `form_open`, `submit_form`, `click_telegram`, `click_wechat`, `view_tariffs`. Их нужно создать в Метрике как цели типа «JavaScript-событие» с такими же идентификаторами.
 
