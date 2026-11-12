@@ -132,9 +132,10 @@
 
   /* ---------- 7.3 Челленджи ---------- */
   var ch = $("#challenges");
-  if (ch) ch.innerHTML = (S.challenges || []).map(function (c) {
+  if (ch) ch.innerHTML = (S.challenges || []).map(function (c, index) {
     return '<li class="sticker">' +
-      '<span class="sticker__kind"><span>Челлендж недели</span><svg class="barcode" data-code="' + esc(c.py) + '" viewBox="0 0 200 50" preserveAspectRatio="none" aria-hidden="true"></svg></span>' +
+      (c.image ? '<img class="sticker__art" src="' + esc(c.image) + '" width="256" height="256" alt="" aria-hidden="true" loading="lazy">' : '') +
+      '<span class="sticker__kind"><span class="sticker__no" aria-hidden="true">' + String(index + 1).padStart(2, "0") + '</span><span>Челлендж недели</span></span>' +
       '<span class="sticker__text">' + esc(c.text) + "</span>" +
       '<span class="sticker__zh"><b lang="zh-Hans">' + esc(c.zh) + '</b><small><i lang="zh-Latn-pinyin">' + esc(c.py) + "</i><br>" + esc(c.note) + "</small></span>" +
       (c.anywhere ? '<span class="sticker__any">можно и не из Китая</span>' : "") +
@@ -163,36 +164,35 @@
     }
   }
 
-  /* ---------- 7.6 Световое меню: матрица «преподаватель × ритм» ---------- */
+  /* ---------- 7.6 Тарифы: две группы по преподавателю ---------- */
   var cur = (S.currency && S.currency.main) || "₽";
-  var rows = [], cols = [];
-  (S.tariffs || []).forEach(function (t) {
-    if (t.teacherType === "native" && !F.showNative) return;
-    var r = rows.filter(function (x) { return x.type === t.teacherType; })[0];
-    if (!r) rows.push(r = { type: t.teacherType, name: t.name, items: {} });
-    if (cols.indexOf(t.rhythm) === -1) cols.push(t.rhythm);
-    r.items[t.rhythm] = t;
-  });
   function panel(t) {
     var price = '<p class="price"><span class="price__plate">' + fmtPrice(t.price) + " " + cur + '<small>/мес</small></span>' +
       '<span class="price__cap">цена первого потока</span>' +
       (F.showStrikePrice && t.nextPrice ? '<span class="price__next">со следующего потока — <s>' + fmtPrice(t.nextPrice) + " " + cur + "</s></span>" : "") +
       "</p>";
     return '<article class="panel" data-tariff="' + esc(t.id) + '">' +
-      '<div class="panel__box"><span class="panel__menuno"><span lang="zh-Hans">' + esc(t.menuNo) + '</span><small lang="zh-Latn-pinyin">' + esc(t.menuPinyin || "") + "</small></span>" +
-      '<span class="panel__big" lang="zh-Hans" aria-hidden="true">' + esc(String(t.menuNo).slice(-1)) + "</span></div>" +
-      '<div class="panel__body"><h4 class="vh">' + esc(t.name) + ", " + esc(t.rhythm) + "</h4>" + price +
+      '<div class="panel__box"><span class="panel__menuno" lang="zh-Hans" aria-hidden="true">' + esc(t.menuNo) + '</span>' +
+      '<h4 class="panel__title"><span class="panel__rhythm">' + esc(t.rhythm) + '</span></h4></div>' +
+      '<div class="panel__body">' + price +
       (t.available ? '<a class="btn btn--sm js-cta" href="#form" data-cta="' + esc(t.id) + '">Выбрать</a>' : "") +
       "</div></article>";
   }
   var menu = $("#menu");
   if (menu) {
-    menu.innerHTML = '<div class="matrix__corner" aria-hidden="true"></div>' +
-      cols.map(function (c) { return '<p class="matrix__col" aria-hidden="true">' + esc(c) + "</p>"; }).join("") +
-      rows.map(function (r) {
-        return '<h3 class="matrix__row">' + esc(r.name) + "</h3>" +
-          cols.map(function (c) { return r.items[c] ? panel(r.items[c]) : '<div class="matrix__empty"></div>'; }).join("");
-      }).join("");
+    var tariffGroups = [];
+    (S.tariffs || []).forEach(function (t) {
+      if (t.teacherType === "native" && !F.showNative) return;
+      var group = tariffGroups.filter(function (g) { return g.type === t.teacherType; })[0];
+      if (!group) tariffGroups.push(group = { type: t.teacherType, name: t.name, items: [] });
+      group.items.push(t);
+    });
+    menu.innerHTML = tariffGroups.map(function (group, index) {
+      var headingId = "tariff-group-" + index;
+      return '<section class="tariff-group" aria-labelledby="' + headingId + '">' +
+        '<h3 class="tariff-group__title" id="' + headingId + '">' + esc(group.name) + '</h3>' +
+        '<div class="tariff-group__cards">' + group.items.map(panel).join("") + '</div></section>';
+    }).join("");
   }
 
   var check = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="3" fill="#CE403B"/><path d="M6 12.5 10 16l8-8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';

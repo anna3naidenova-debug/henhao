@@ -78,10 +78,10 @@ window.SITE = {
 
   challenges: [
     // китайский текст проверяет преподаватель
-    { text: "Закажи бабл-ти, не тыкая пальцем в меню", zh: "奶茶", py: "nǎichá", note: "молочный чай" },
-    { text: "Спроси дорогу в метро", zh: "地铁", py: "dìtiě", note: "метро" },
-    { text: "Прочитай вывеску и расскажи, что на ней", zh: "招牌", py: "zhāopai", note: "вывеска" },
-    { text: "Напиши сообщение на китайском — без переводчика", zh: "发消息", py: "fā xiāoxi", note: "отправить сообщение" }
+    { text: "Закажи бабл-ти, не тыкая пальцем в меню", zh: "奶茶", py: "nǎichá", note: "молочный чай", image: "assets/img/challenge-bubble-tea.png" },
+    { text: "Спроси дорогу в метро", zh: "地铁", py: "dìtiě", note: "метро", image: "assets/img/challenge-metro.png" },
+    { text: "Прочитай вывеску и расскажи, что на ней", zh: "招牌", py: "zhāopai", note: "вывеска", image: "assets/img/challenge-shop-sign.png" },
+    { text: "Напиши сообщение на китайском — без переводчика", zh: "发消息", py: "fā xiāoxi", note: "отправить сообщение", image: "assets/img/challenge-message.png" }
   ],
 
   track: [
