@@ -330,8 +330,8 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .menu__terms p + p { color: #cfcfcf; }
 
 .menu__inc-title { margin-top: 44px; }
-.includes { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-.includes li { display: inline-flex; align-items: center; gap: 8px; background: var(--white); color: var(--black); padding: 8px 14px 8px 10px; font-weight: 500; font-size: 15px; border-radius: var(--radius-sticker); }
+.includes { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+.includes li { display: inline-flex; flex: 1 1 auto; align-items: center; gap: 8px; background: var(--white); color: var(--black); padding: 8px 14px 8px 10px; font-weight: 500; font-size: 15px; white-space: nowrap; border-radius: var(--radius-sticker); }
 .includes li:nth-child(odd) { transform: rotate(-1deg); }
 .includes li:nth-child(even) { transform: rotate(1deg); }
 .includes svg { width: 22px; height: 22px; flex: none; }
