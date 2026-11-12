@@ -337,7 +337,7 @@
       form.elements["cta_source"].value = a.getAttribute("data-cta") || "direct";
       if (!a.closest(".panel")) goal("click_manager");
       $("#form-success").hidden = true; form.hidden = false;
-      formTitle.textContent = formTitleText;
+      formTitle.textContent = a.getAttribute("data-form-title") || formTitleText;
     });
   });
 

@@ -276,6 +276,48 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
   .track { grid-column: 7 / -1; padding: 32px; }
 }
 
+/* ============ КАК ПРОХОДЯТ ЗАНЯТИЯ ============ */
+.learning { scroll-margin-top: 96px; }
+.learning__grid { display: grid; gap: 36px; }
+.learning__intro { min-width: 0; }
+.learning__label { margin: 0 0 14px; color: var(--red-dark); font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.learning .h2 { max-width: 25ch; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.12; }
+.learning__lead { max-width: 64ch; margin: 0; font-size: 17px; line-height: 1.5; }
+.learning__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 24px 0 0; padding: 16px 0 0; border-top: 2px solid var(--black); list-style: none; }
+.learning__facts strong { display: block; color: var(--red-dark); font-family: var(--f-head); font-size: clamp(24px, 2.5vw, 34px); font-weight: 700; line-height: 1.15; }
+.learning__facts span { display: block; margin-top: 6px; font-size: 13px; line-height: 1.35; }
+.learning__features { display: grid; gap: 24px; align-content: start; }
+.learning__feature { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-content: start; gap: 6px 16px; min-width: 0; }
+.learning__visual { grid-column: 1; grid-row: 1 / span 2; align-self: center; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--white); }
+.learning__art { width: 44px; height: 44px; object-fit: contain; object-position: center; pointer-events: none; }
+.learning__feature:nth-child(even) .learning__visual { background: #f5e8e4; }
+.learning__feature .h3 { grid-column: 2; grid-row: 1; font-size: 18px; line-height: 1.3; }
+.learning__feature p { grid-column: 2; grid-row: 2; margin: 0; color: #454545; font-size: 16px; line-height: 1.5; }
+@media (min-width: 900px) {
+  .learning { scroll-margin-top: 84px; }
+  .learning__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 40px; }
+  .learning__intro { display: flex; flex-direction: column; }
+  .learning__label { margin-bottom: 12px; }
+  .learning .h2 { max-width: 100%; margin-bottom: 16px; font-size: clamp(28px, 2.9vw, 40px); }
+  .learning__lead { margin-bottom: 20px; font-size: 16px; line-height: 1.4; }
+  .learning__facts { margin-top: auto; padding-top: 12px; gap: 10px; }
+  .learning__facts strong { font-size: 28px; }
+  .learning__features { gap: 22px; align-content: space-between; }
+  .learning__feature { grid-template-columns: 80px minmax(0, 1fr); column-gap: 18px; }
+  .learning__visual { width: 80px; height: 80px; }
+  .learning__art { width: 52px; height: 52px; }
+  .learning__feature .h3 { font-size: 18px; line-height: 1.25; }
+  .learning__feature p { font-size: 15px; line-height: 1.4; }
+}
+@media (min-width: 900px) and (max-height: 760px) {
+  .learning .h2 { font-size: clamp(28px, 2.6vw, 36px); }
+  .learning__label { margin-bottom: 10px; }
+  .learning__lead { font-size: 15px; }
+  .learning__features { gap: 16px; }
+  .learning__feature .h3 { font-size: 17px; }
+  .learning__feature p { font-size: 14px; }
+}
+
 /* ============ ПРЕПОДАВАТЕЛИ ============ */
 .teachers__grid { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 18px; margin-top: 28px; }
 .teacher-card { min-width: 0; background: var(--white); border: 2px solid var(--black); box-shadow: 4px 4px 0 var(--black); }
@@ -329,6 +371,32 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
   .teachers__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
   .teacher-card__body { padding: 14px; }
   .teacher-card__body .h3 { font-size: 18px; }
+}
+
+/* ============ ПРОБНЫЙ ВЕБИНАР ============ */
+.trial { scroll-margin-top: 96px; }
+.trial__ticket { overflow: hidden; border: 2px solid var(--black); border-radius: 8px; background: var(--white); }
+.trial__main { padding: 24px 20px; background: var(--red); color: var(--white); }
+.trial__eyebrow { margin: 0 0 14px; font-size: 13px; font-weight: 600; }
+.trial .h2 { margin-bottom: 16px; font-size: clamp(28px, 2.8vw, 38px); line-height: 1.12; }
+.trial__lead { margin: 0; font-size: 17px; line-height: 1.45; }
+.trial__when { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-block: 22px; }
+.trial__duration { display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 15px; white-space: nowrap; }
+.trial__duration strong { font-family: var(--f-head); font-size: 44px; font-weight: 800; line-height: 1; }
+.trial__schedule { margin: 0; font-size: 13px; line-height: 1.4; }
+.trial__schedule b, .trial__schedule span { display: block; }
+.trial__schedule p { margin: 10px 0 0; }
+.trial__schedule strong { display: block; font-weight: 500; }
+.trial__cta { width: 100%; padding-inline: 18px; background: var(--white); color: var(--black); font-size: 16px; line-height: 1.3; text-align: center; }
+.trial__cta:hover { background: var(--paper); }
+.trial__benefits { display: grid; align-content: center; gap: 24px; padding: 24px 20px; border-top: 2px dashed var(--frame); }
+.trial__benefits .h3 { font-size: 18px; line-height: 1.3; }
+.trial__benefits p { margin: 8px 0 0; font-size: 16px; line-height: 1.45; }
+.trial__gift { padding-left: 14px; border-left: 3px solid var(--red); }
+@media (min-width: 900px) {
+  .trial__ticket { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trial__main, .trial__benefits { padding: 28px; }
+  .trial__benefits { border-top: 0; border-left: 2px dashed var(--frame); }
 }
 
 /* ============ 7.6 ТАРИФЫ: СВЕТОВОЕ МЕНЮ ============ */
