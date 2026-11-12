@@ -75,4 +75,4 @@ python3 tools/subset_fonts.py
 
 ## Заглушки, которые нужно заменить
 
-Telegram (@naidenovaann), WeChat (henhaoschool, QR) и домен henhaoschool.ru уже настоящие. Осталось: e-mail hello@henhaoschool.ru в конфиге (такого ящика пока нет — создать или заменить), текст политики конфиденциальности (`site/privacy.html`). Описания уровней HSK1–3 в трекинге (`track` в конфиге) — ориентировочные, проверить у преподавателя.
+Telegram (@naidenovaann), WeChat (henhaoschool, QR), e-mail hellohenhaoschool@gmail.com и домен henhaoschool.ru уже настоящие. Осталось проверить текст политики конфиденциальности (`site/privacy.html`). Описания уровней HSK1–3 в трекинге (`track` в конфиге) — ориентировочные, проверить у преподавателя.

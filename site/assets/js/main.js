@@ -213,7 +213,9 @@
   /* ---------- 7.13 Вопросы ---------- */
   var fl = $("#faq-list");
   if (fl) fl.innerHTML = (S.faq || []).map(function (f) {
-    return '<details class="qa"><summary>' + esc(f.q) + "</summary><p>" + esc(f.a) + "</p></details>";
+    return '<details class="qa"><summary>' + esc(f.q) + "</summary><p>" + esc(f.a) + "</p>" +
+      (f.ctaLabel ? '<a class="btn btn--sm js-cta qa__cta" href="#form" data-cta="faq-trial">' + esc(f.ctaLabel) + '</a>' : '') +
+      "</details>";
   }).join("");
 
   /* ---------- Подвал: настоящий QR ---------- */

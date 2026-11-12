@@ -402,6 +402,7 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .qa summary::after { content: "+"; font-size: 30px; font-weight: 400; color: var(--red); line-height: 1; transition: transform .2s; flex: none; }
 .qa[open] summary::after { transform: rotate(45deg); }
 .qa p { margin: 0 0 22px; max-width: 40em; }
+.qa__cta { max-width: 100%; margin-bottom: 22px; text-align: center; }
 @media (min-width: 900px) {
   .faq__head { grid-column: 1 / span 4; }
   .faq__goose { width: 160px; margin-top: 16px; }
