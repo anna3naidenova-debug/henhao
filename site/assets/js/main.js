@@ -117,7 +117,7 @@
     return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
   }
   $$(".qr-texture").forEach(function (el) {
-    el.style.backgroundImage = qrPattern(24, 24, "rgba(80,10,10,0.22)", 7, 0.45);
+    el.style.backgroundImage = qrPattern(24, 24, "rgba(90,25,5,0.22)", 7, 0.45);
     // мягко гасим узор к краю блока
     el.style.webkitMaskImage = el.style.maskImage = "linear-gradient(135deg, #000 30%, transparent 85%)";
   });
@@ -250,7 +250,7 @@
     }).join("");
   }
 
-  var check = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="3" fill="#CE403B"/><path d="M6 12.5 10 16l8-8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var check = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="3" fill="#E94E2B"/><path d="M6 12.5 10 16l8-8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var inc = $("#includes");
   if (inc) inc.innerHTML = (S.includes || []).map(function (x) { return "<li>" + check + esc(x) + "</li>"; }).join("");
 
