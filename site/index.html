@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/onest.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=19">
+<link rel="stylesheet" href="assets/css/style.css?v=22">
 </head>
 <body>
 
@@ -152,28 +152,6 @@
   </div>
 </section>
 
-<!-- 7.4 МИНИ-УРОК (статичная версия) -->
-<section class="section lesson" id="lesson">
-  <div class="wrap grid">
-    <div class="lesson__text">
-      <h2 class="h2">Пока читаешь — уже учишь</h2>
-      <p class="lead">Иероглифы собираются из частей. Вот один из самых первых</p>
-    </div>
-    <div class="lesson__board">
-      <div class="formula" role="img" aria-label="Иероглиф 女 «женщина» плюс 子 «ребёнок» даёт 好, hǎo, «хорошо»">
-        <div class="part part--black"><span lang="zh-Hans">女</span><small><i lang="zh-Latn-pinyin">nǚ</i> женщина</small></div>
-        <span class="op">+</span>
-        <div class="part part--white"><span lang="zh-Hans">子</span><small><i lang="zh-Latn-pinyin">zǐ</i> ребёнок</small></div>
-        <span class="op">=</span>
-        <div class="part part--red"><span lang="zh-Hans">好</span><small><i lang="zh-Latn-pinyin">hǎo</i> хорошо</small></div>
-      </div>
-      <p class="lesson__explain">Женщина рядом с ребёнком — значит, всё хорошо. А 你好 <i lang="zh-Latn-pinyin">nǐ hǎo</i> — буквально «тебе хорошо»: так здороваются</p>
-      <img class="lesson__goose" src="assets/img/goose-shout.webp" width="239" height="322" alt="Гусь громко кричит" loading="lazy">
-      <p class="note lesson__note" aria-hidden="true"><span class="zh-brush" lang="zh-Hans">好！</span> <span class="note__py" lang="zh-Latn-pinyin">hǎo!</span></p>
-    </div>
-  </div>
-</section>
-
 <!-- 7.5 ПУТЬ ПО УРОВНЯМ -->
 <section class="section section--steel path" id="path">
   <div class="wrap grid">
@@ -257,34 +235,32 @@
 <!-- ПРОБНЫЙ ВЕБИНАР -->
 <section class="section trial" id="trial" aria-labelledby="trial-title">
   <div class="wrap">
-    <div class="trial__ticket">
-      <div class="trial__main">
-        <p class="trial__eyebrow">Бесплатный пробный вебинар</p>
+    <div class="trial__panel">
+      <div class="trial__card">
         <h2 class="h2" id="trial-title">Попробуйте китайский вместе с носителем</h2>
-        <p class="trial__lead">Каждую субботу — пробный вебинар на 45 минут с преподавателем нашей школы. Познакомьтесь с форматом обучения и изучите полезные слова и фразы, которые сможете использовать сразу после занятия.</p>
-        <div class="trial__when">
-          <p class="trial__duration"><strong>45</strong> минут</p>
-          <div class="trial__schedule">
-            <b>Каждую субботу</b>
-            <p><strong>С нуля</strong><span>16:00 Китай / 11:00 МСК</span></p>
-            <p><strong>Есть база · HSK 1 и выше</strong><span>17:00 Китай / 12:00 МСК</span></p>
-          </div>
-        </div>
+        <p class="trial__lead">Пробный вебинар с преподавателем нашей школы — каждую субботу</p>
+        <p class="trial__pill">Бесплатно · 45 минут · онлайн</p>
+        <ul class="trial__slots" aria-label="Расписание пробного вебинара по уровням">
+          <li>
+            <span class="trial__level">С нуля</span>
+            <strong>16:00 <small>Китай</small></strong>
+            <span class="trial__msk">11:00 МСК</span>
+          </li>
+          <li>
+            <span class="trial__level">Есть база · HSK 1 и выше</span>
+            <strong>17:00 <small>Китай</small></strong>
+            <span class="trial__msk">12:00 МСК</span>
+          </li>
+        </ul>
         <a class="btn btn--big js-cta trial__cta" href="#form" data-cta="trial" data-form-title="Записаться на пробное занятие">Записаться на пробное занятие</a>
       </div>
-      <div class="trial__benefits">
-        <article>
-          <h3 class="h3">Для начинающих и продолжающих</h3>
-          <p>Два уровня: для тех, кто изучает китайский с нуля, и для тех, кто уже занимался и владеет языком на уровне HSK 1 и выше</p>
-        </article>
-        <article>
-          <h3 class="h3">Практика после встречи</h3>
-          <p>Отправим все материалы вебинара, включая аудиофайлы для отработки произношения, пиньиня и изученных слов</p>
-        </article>
-        <article class="trial__gift">
-          <h3 class="h3">Подарок каждому участнику</h3>
-          <p>Дополнительные материалы для самостоятельной практики китайского</p>
-        </article>
+      <div class="trial__visual">
+        <img class="trial__goose" src="assets/img/goose-laptop.webp" width="640" height="672" alt="" loading="lazy">
+        <ol class="trial__steps" aria-label="Что будет на вебинаре">
+          <li><b aria-hidden="true">1</b><span>Познакомитесь с форматом обучения</span></li>
+          <li><b aria-hidden="true">2</b><span>Выучите фразы, которые пригодятся сразу</span></li>
+          <li><b aria-hidden="true">3</b><span>Получите материалы, аудио и подарок</span></li>
+        </ol>
       </div>
     </div>
   </div>

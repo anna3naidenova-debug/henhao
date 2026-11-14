@@ -230,27 +230,6 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
   .sticker__art { width: 86px; height: 86px; right: -18px; top: -42px; }
 }
 
-/* ============ 7.4 МИНИ-УРОК ============ */
-.lesson__board { position: relative; background: var(--white); padding: 28px 20px 120px; border: 2px solid var(--black); }
-.formula { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
-.part { display: grid; justify-items: center; gap: 6px; }
-.part span { width: clamp(76px, 18vw, 150px); aspect-ratio: 1; display: grid; place-items: center; font-weight: 900; font-size: clamp(48px, 11vw, 100px); line-height: 1; }
-.part small { font-size: 14px; color: var(--grey); text-align: center; }
-.part small i { display: block; font-size: 16px; color: var(--black); font-weight: 600; }
-.part--black span { background: var(--black); color: var(--white); }
-.part--white span { background: var(--white); color: var(--black); box-shadow: inset 0 0 0 3px var(--black); }
-.part--red span { background: var(--red); color: var(--white); }
-.op { font-family: var(--f-head); font-weight: 800; font-size: clamp(28px, 5vw, 48px); padding-bottom: 48px; }
-.lesson__explain { margin: 28px auto 0; max-width: 32em; text-align: left; }
-.lesson__goose { position: absolute; width: 110px; right: 16px; bottom: -30px; }
-.lesson__note { position: absolute; right: 130px; bottom: 24px; transform: rotate(-6deg); font-size: 28px; }
-@media (min-width: 900px) {
-  .lesson__text { grid-column: 1 / span 4; }
-  .lesson__board { grid-column: 5 / -1; padding: 48px 48px 64px; }
-  .lesson__goose { width: 150px; right: -40px; bottom: -40px; }
-  .lesson__note { right: 120px; bottom: 30px; }
-}
-
 /* ============ 7.5 ТРЕКИНГ ============ */
 .path__goose { display: block; width: 100%; max-width: 420px; height: auto; margin: 24px 0 8px; }
 
@@ -296,7 +275,7 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .learning__track { display: flex; gap: 16px; margin: 0; padding: 4px var(--edge) 8px; list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--edge); overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .learning__track::-webkit-scrollbar { display: none; }
 .learning__track:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
-.lslide { flex: 0 0 min(84vw, 360px); display: flex; flex-direction: column; height: 430px; padding: 26px 22px 0; border: 2px solid var(--black); border-radius: 28px; overflow: hidden; scroll-snap-align: start; text-align: center; }
+.lslide { flex: 0 0 min(84vw, 360px); display: flex; flex-direction: column; height: 430px; padding: 26px 22px 0; border: 2px solid var(--black); border-radius: var(--radius-sticker); overflow: hidden; scroll-snap-align: start; text-align: center; }
 .lslide--rose { background: #F6E2DA; }
 .lslide--white { background: var(--white); }
 .lslide--steel { background: #C5CDCB; }
@@ -304,22 +283,22 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .lslide__title { margin: 0 0 12px; font-family: var(--f-head); font-weight: 700; font-size: 20px; line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
 .lslide__text { margin: 0; color: #333; font-size: 15px; line-height: 1.45; }
 /* Лист с материалом школы: крупнее карточки и обрезается её правым и нижним краем, как экран телефона в референсе */
-.lslide__sheet { flex: 1 1 0; min-height: 0; margin: 22px -22px 0 0; border: 2px solid var(--black); border-right: 0; border-bottom: 0; border-radius: 16px 0 0 0; background: var(--white); overflow: hidden; box-shadow: -6px -6px 0 rgba(17,17,17,.08); }
+.lslide__sheet { flex: 1 1 0; min-height: 0; margin: 22px -22px 0 0; border: 2px solid var(--black); border-right: 0; border-bottom: 0; border-radius: 4px 0 0 0; background: var(--white); overflow: hidden; box-shadow: -6px -6px 0 rgba(17,17,17,.08); }
 .lslide__sheet img { display: block; width: 150%; max-width: none; height: auto; }
 /* Лист целиком по ширине карточки: рамка со всех сторон, кроме низа; если не хватает высоты, срезается только низ */
-.lslide .lslide__sheet--fit { margin-right: 0; border-right: 2px solid var(--black); border-radius: 16px 16px 0 0; }
+.lslide .lslide__sheet--fit { margin-right: 0; border-right: 2px solid var(--black); border-radius: 4px 4px 0 0; }
 .lslide__sheet--fit img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 /* Фото целиком, без обрезки, в такой же рамке, как лист в соседних карточках: скруглённый верх, низ упирается в край карточки. Карточка с фото на десктопе шире остальных */
-.lslide .lslide__sheet--full { flex: 0 0 auto; margin: auto 0 0; border-right: 2px solid var(--black); border-radius: 16px 16px 0 0; }
+.lslide .lslide__sheet--full { flex: 0 0 auto; margin: auto 0 0; border-right: 2px solid var(--black); border-radius: 4px 4px 0 0; }
 .lslide__sheet--full img { width: 100%; }
 /* Отступы как в остальных карточках: текст сразу под заголовком, фото прижато к низу, до него не меньше обычного отступа */
 .lslide--photo .lslide__text { margin-bottom: 22px; }
 /* Стопка из трёх листов с материалами урока: два выглядывают сзади, главный лежит спереди */
 .lslide .lslide__sheet--stack { position: relative; margin-right: 0; border: 0; border-radius: 0; background: none; box-shadow: none; overflow: visible; }
-.lslide__sheet--stack .lstack__item { position: absolute; width: 54%; height: auto; border: 2px solid var(--black); border-radius: 8px; background: var(--white); }
+.lslide__sheet--stack .lstack__item { position: absolute; width: 54%; height: auto; border: 2px solid var(--black); border-radius: 4px; background: var(--white); }
 .lslide__sheet--stack .lstack__item--left { top: 0; left: 0; transform: rotate(-5deg); }
 .lslide__sheet--stack .lstack__item--right { top: 4px; right: 0; transform: rotate(5deg); }
-.lslide__sheet--stack .lstack__item--front { top: auto; bottom: 16px; left: 5%; width: 90%; border-radius: 10px; box-shadow: 0 -8px 20px rgba(17,17,17,.18); }
+.lslide__sheet--stack .lstack__item--front { top: auto; bottom: 16px; left: 5%; width: 90%; border-radius: 4px; box-shadow: 0 -8px 20px rgba(17,17,17,.18); }
 
 .learning__nav { display: flex; gap: 12px; margin-top: 16px; padding-inline: var(--edge); }
 .learning__arrow { display: grid; place-items: center; width: 52px; height: 52px; padding: 0; border: 2px solid var(--black); border-radius: 50%; background: var(--white); color: var(--black); cursor: pointer; transition: background .15s, color .15s, opacity .15s; }
@@ -333,7 +312,7 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
   /* Текст центрируется по карточкам, а не по карточкам вместе со стрелками: снизу запас на высоту стрелок (52 + 20) и разницу отступов ленты (8 − 4) */
   .learning__intro { padding-right: 0; padding-bottom: 76px; }
   .learning__track { gap: 24px; padding-left: 8px; scroll-padding-left: 8px; }
-  .lslide { flex-basis: 400px; height: 560px; padding: 34px 30px 0; border-radius: 32px; }
+  .lslide { flex-basis: 400px; height: 560px; padding: 34px 30px 0; border-radius: var(--radius-sticker); }
   .lslide__title { font-size: 24px; }
   .lslide__text { font-size: 16px; }
   .lslide__sheet { margin: 28px -30px 0 0; }
@@ -402,28 +381,38 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 
 /* ============ ПРОБНЫЙ ВЕБИНАР ============ */
 .trial { scroll-margin-top: 96px; }
-.trial__ticket { overflow: hidden; border: 2px solid var(--black); border-radius: 8px; background: var(--white); }
-.trial__main { padding: 24px 20px; background: var(--red); color: var(--white); }
-.trial__eyebrow { margin: 0 0 14px; font-size: 13px; font-weight: 600; }
-.trial .h2 { margin-bottom: 16px; font-size: clamp(28px, 2.8vw, 38px); line-height: 1.12; }
-.trial__lead { margin: 0; font-size: 17px; line-height: 1.45; }
-.trial__when { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-block: 22px; }
-.trial__duration { display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 15px; white-space: nowrap; }
-.trial__duration strong { font-family: var(--f-head); font-size: 44px; font-weight: 800; line-height: 1; }
-.trial__schedule { margin: 0; font-size: 13px; line-height: 1.4; }
-.trial__schedule b, .trial__schedule span { display: block; }
-.trial__schedule p { margin: 10px 0 0; }
-.trial__schedule strong { display: block; font-weight: 500; }
-.trial__cta { width: 100%; padding-inline: 18px; background: var(--white); color: var(--black); font-size: 16px; line-height: 1.3; text-align: center; }
-.trial__cta:hover { background: var(--paper); }
-.trial__benefits { display: grid; align-content: center; gap: 24px; padding: 24px 20px; border-top: 2px dashed var(--frame); }
-.trial__benefits .h3 { font-size: 18px; line-height: 1.3; }
-.trial__benefits p { margin: 8px 0 0; font-size: 16px; line-height: 1.45; }
-.trial__gift { padding-left: 14px; border-left: 3px solid var(--red); }
+/* Панель с оранжевой подсветкой: сверху цвет кнопки, книзу светлеет. Текст лежит только на белых карточках */
+.trial__panel { display: grid; gap: 16px; padding: 14px; border: 2px solid var(--black); border-radius: var(--radius-sticker); background: linear-gradient(180deg, var(--red) 0%, #F59A80 48%, #FBD9CD 100%); }
+.trial__card { min-width: 0; padding: 28px 20px 22px; border-radius: var(--radius-sticker); background: var(--white); border: 2px solid var(--black); text-align: center; box-shadow: 4px 4px 0 var(--black); }
+.trial .h2 { margin-bottom: 12px; font-size: clamp(25px, 2.6vw, 36px); line-height: 1.12; text-wrap: balance; }
+.trial__lead { max-width: 30em; margin: 0 auto 18px; font-size: 16px; line-height: 1.45; text-wrap: balance; }
+.trial__pill { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; padding: 11px 14px; border-radius: var(--radius-sticker); background: #FDEDE8; font-size: 15px; font-weight: 600; line-height: 1.3; }
+.trial__pill::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--red); }
+.trial__slots { display: grid; gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; text-align: left; }
+.trial__slots li { min-width: 0; padding: 16px; border-radius: var(--radius-sticker); background: #F3F3F1; }
+.trial__slots span { display: block; font-size: 14px; line-height: 1.35; }
+.trial__level { min-height: 1.35em; color: #555; }
+.trial__slots strong { display: block; margin: 8px 0 4px; font-family: var(--f-head); font-size: 28px; font-weight: 700; line-height: 1.1; white-space: nowrap; }
+.trial__slots small { font-family: var(--f-body); font-size: 15px; font-weight: 500; }
+.trial__cta { width: 100%; margin-top: 16px; padding-inline: 18px; font-size: 16px; line-height: 1.3; text-align: center; }
+.trial__visual { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-width: 0; background: radial-gradient(closest-side, rgba(255,255,255,.9), rgba(255,255,255,0)) center 20% / 80% 78% no-repeat; }
+.trial__goose { width: min(58%, 250px); height: auto; margin: 8px 0 -22px; }
+.trial__steps { position: relative; display: grid; gap: 14px; width: 100%; margin: 0; padding: 20px; border-radius: var(--radius-sticker); background: var(--white); border: 2px solid var(--black); list-style: none; box-shadow: 4px 4px 0 var(--black); }
+.trial__steps li { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: center; gap: 12px; font-size: 15px; font-weight: 500; line-height: 1.35; }
+.trial__steps b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 4px; background: var(--black); color: var(--white); font-family: var(--f-head); font-size: 15px; font-weight: 700; }
+@media (min-width: 520px) {
+  .trial__slots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trial__level { min-height: 2.7em; }
+}
+@media (min-width: 640px) {
+  .trial__steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 22px; }
+  .trial__steps li { grid-template-columns: minmax(0, 1fr); align-items: start; align-content: start; }
+}
 @media (min-width: 900px) {
-  .trial__ticket { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .trial__main, .trial__benefits { padding: 28px; }
-  .trial__benefits { border-top: 0; border-left: 2px dashed var(--frame); }
+  .trial__panel { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 20px; border-radius: var(--radius-sticker); background: linear-gradient(160deg, var(--red) 0%, #F59A80 45%, #FBD9CD 100%); }
+  .trial__card { align-self: center; padding: 40px 36px 32px; border-radius: var(--radius-sticker); }
+  .trial__visual { order: -1; }
+  .trial__goose { width: min(64%, 340px); margin-top: 12px; }
 }
 
 /* ============ 7.6 ТАРИФЫ: СВЕТОВОЕ МЕНЮ ============ */
