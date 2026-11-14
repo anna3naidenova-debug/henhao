@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/onest.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=22">
+<link rel="stylesheet" href="assets/css/style.css?v=25">
 </head>
 <body>
 
@@ -39,7 +39,7 @@
       <a class="icon-btn js-tg" href="#" aria-label="Написать в Telegram" data-goal="click_telegram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 3.6 2.9 10.7c-1.1.4-1.1 1.1-.2 1.4l4.7 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.4-1.5ZM9.3 13.4l8.5-5.4c.4-.2.8-.1.5.2l-7 6.4-.3 3.2-1.7-4.4Z"/></svg>
       </a>
-      <a class="btn btn--sm js-cta" href="#form" data-cta="header"><span class="only-mobile">Записаться</span><span class="only-desktop">Записаться на занятие</span></a>
+      <a class="btn btn--sm js-cta" href="#form" data-cta="header"><span class="only-mobile">Записаться</span><span class="only-desktop">Записаться в группу</span></a>
     </div>
   </div>
 </header>
@@ -100,7 +100,10 @@
     <div class="hero__text">
       <h1 class="h1">Китайский для жизни и работы в Китае</h1>
       <p class="lead">Онлайн-школа из Гуанчжоу, группы до 8 человек<span class="hero__offer">Бесплатное пробное каждую субботу</span></p>
-      <a class="btn btn--big js-cta" href="#form" data-cta="hero">Записаться на занятие</a>
+      <div class="hero__actions">
+        <a class="btn btn--big" href="https://t.me/HHlesson_bot" target="_blank" rel="noopener" data-goal="click_telegram">Записаться на пробное</a>
+        <a class="btn btn--big btn--light js-cta" href="#form" data-cta="hero">Записаться в группу</a>
+      </div>
     </div>
   </div>
 </section>
@@ -185,7 +188,7 @@
         <li><strong>90</strong><span>минут на занятие</span></li>
         <li><strong>2–3</strong><span>раза в неделю</span></li>
       </ul>
-      <a class="btn btn--big js-cta learning__cta" href="#form" data-cta="learning">Записаться на занятие</a>
+      <a class="btn btn--big js-cta learning__cta" href="#form" data-cta="learning">Записаться в группу</a>
     </div>
     <div class="learning__carousel">
       <ul class="learning__track" id="learning-track" tabindex="0" aria-label="Как проходят занятия: карточки, листаются по горизонтали">
@@ -252,7 +255,7 @@
             <span class="trial__msk">12:00 МСК</span>
           </li>
         </ul>
-        <a class="btn btn--big js-cta trial__cta" href="#form" data-cta="trial" data-form-title="Записаться на пробное занятие">Записаться на пробное занятие</a>
+        <a class="btn btn--big trial__cta" href="https://t.me/HHlesson_bot" target="_blank" rel="noopener" data-goal="click_telegram">Записаться на пробное занятие</a>
       </div>
       <div class="trial__visual">
         <img class="trial__goose" src="assets/img/goose-laptop.webp" width="640" height="672" alt="" loading="lazy">
@@ -359,7 +362,7 @@
         <li class="step"><span class="step__no">3</span><div><h3 class="h3">Выбери удобное расписание</h3><p>Соберём группу под твоё время</p></div><svg class="barcode step__bar" data-code="STEP3" viewBox="0 0 200 50" preserveAspectRatio="none" aria-hidden="true"></svg></li>
         <li class="step"><span class="step__no">4</span><div><h3 class="h3">Начни заниматься и найди единомышленников</h3><p>Как только соберётся группа</p></div><svg class="barcode step__bar" data-code="STEP4" viewBox="0 0 200 50" preserveAspectRatio="none" aria-hidden="true"></svg></li>
       </ol>
-      <a class="btn btn--big js-cta" href="#form" data-cta="steps">Записаться на занятие</a>
+      <a class="btn btn--big js-cta" href="#form" data-cta="steps">Записаться в группу</a>
     </div>
     <div class="recruit" aria-hidden="true">
       <span class="recruit__word">НАБОР<br>ОТКРЫТ</span>
@@ -386,7 +389,7 @@
       <div class="waybill__top">
         <div>
           <span class="waybill__kind"><span lang="zh-Hans">快递单</span> <i lang="zh-Latn-pinyin">kuàidìdān</i> — накладная</span>
-          <h2 class="h2 waybill__title" id="form-title">Записаться на занятие</h2>
+          <h2 class="h2 waybill__title" id="form-title">Записаться в группу</h2>
         </div>
         <div class="waybill__meta">
           <svg class="barcode" data-code="HENHAO2026" viewBox="0 0 200 50" preserveAspectRatio="none" aria-hidden="true"></svg>
@@ -441,7 +444,7 @@
           <p class="field__err" data-err="consent">Без согласия мы не сможем принять заявку</p>
         </div>
 
-        <button class="btn btn--big btn--block" type="submit" id="form-submit">Записаться на занятие</button>
+        <button class="btn btn--big btn--block" type="submit" id="form-submit">Записаться в группу</button>
         <p class="form-error" id="form-error" hidden>
           <img src="assets/img/goose-angry.webp" width="240" height="303" alt="" loading="lazy">
           <span>Заявка не отправилась. Проверь интернет и нажми ещё раз — или напиши нам в <a class="js-tg" href="#" data-goal="click_telegram">Telegram</a></span>
@@ -495,13 +498,13 @@
 
 <!-- Нижняя плашка на телефоне -->
 <div class="dock" id="dock" aria-hidden="true">
-  <a class="btn btn--block js-cta" href="#form" data-cta="dock" tabindex="-1">Записаться на занятие</a>
+  <a class="btn btn--block js-cta" href="#form" data-cta="dock" tabindex="-1">Записаться в группу</a>
 </div>
 
 <p class="cookie" id="cookie" hidden>Мы используем cookie и Яндекс Метрику, чтобы понимать, что на сайте работает. <button type="button" id="cookie-ok">Понятно</button></p>
 
 <script src="site.config.js?v=2"></script>
 <script src="assets/js/qrcode.js?v=2"></script>
-<script src="assets/js/main.js?v=6"></script>
+<script src="assets/js/main.js?v=7"></script>
 </body>
 </html>

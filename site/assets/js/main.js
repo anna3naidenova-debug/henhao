@@ -45,6 +45,10 @@
     a.href = tg; a.target = "_blank"; a.rel = "noopener";
     a.addEventListener("click", function () { goal("click_telegram"); });
   });
+  // Внешние ссылки с готовым адресом (например, бот записи на пробное занятие): только цель в Метрике
+  $$("[data-goal]").forEach(function (a) {
+    a.addEventListener("click", function () { goal(a.getAttribute("data-goal")); });
+  });
 
   /* ---------- Флаги блоков ---------- */
   var F = S.flags || {};
