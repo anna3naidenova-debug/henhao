@@ -392,10 +392,10 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
   .teachers__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 900px) {
-  .teachers__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .teachers__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
-@media (min-width: 1100px) {
-  .teachers__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+@media (min-width: 900px) and (max-width: 1199px) {
+  .teachers__grid { gap: 16px; }
   .teacher-card__body { padding: 14px; }
   .teacher-card__body .h3 { font-size: 18px; }
 }
