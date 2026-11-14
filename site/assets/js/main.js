@@ -273,6 +273,28 @@
       "</details>";
   }).join("");
 
+  /* ---------- Как проходят занятия: стрелки карусели ---------- */
+  var lTrack = $("#learning-track");
+  if (lTrack) {
+    var lArrows = $$(".learning__arrow");
+    var syncArrows = function () {
+      var max = lTrack.scrollWidth - lTrack.clientWidth - 2;
+      lArrows.forEach(function (b) {
+        b.disabled = b.getAttribute("data-dir") === "-1" ? lTrack.scrollLeft <= 2 : lTrack.scrollLeft >= max;
+      });
+    };
+    lArrows.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var slide = lTrack.querySelector(".lslide");
+        var step = slide.getBoundingClientRect().width + (parseFloat(getComputedStyle(lTrack).columnGap) || 0);
+        lTrack.scrollBy({ left: step * Number(b.getAttribute("data-dir")), behavior: "smooth" });
+      });
+    });
+    lTrack.addEventListener("scroll", syncArrows, { passive: true });
+    window.addEventListener("resize", syncArrows);
+    syncArrows();
+  }
+
   /* ---------- Подвал: настоящий QR ---------- */
   var qrTg = $("#qr-tg");
   if (qrTg && window.qrcode && tg && tg !== "#") {

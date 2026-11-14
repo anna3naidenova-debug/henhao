@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/unbounded.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/onest.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=6">
+<link rel="stylesheet" href="assets/css/style.css?v=16">
 </head>
 <body>
 
@@ -198,38 +198,45 @@
 
 <!-- КАК ПРОХОДЯТ ЗАНЯТИЯ -->
 <section class="section learning" id="how-we-learn" aria-labelledby="learning-title">
-  <div class="wrap learning__grid">
+  <div class="learning__grid">
     <div class="learning__intro">
       <p class="learning__label">Как проходят занятия</p>
-      <h2 class="h2" id="learning-title">Китайский в небольшой группе — время говорить есть у каждого</h2>
+      <h2 class="h2" id="learning-title">Китайский в небольшой группе — <span class="learning__accent">время говорить есть у каждого</span></h2>
       <p class="learning__lead">Группы 4–8 человек, занятия 2–3 раза в неделю. Русскоязычный преподаватель или носитель с объяснениями на русском.</p>
       <ul class="learning__facts" aria-label="Формат занятий">
         <li><strong>4–8</strong><span>человек в группе</span></li>
         <li><strong>90</strong><span>минут на занятие</span></li>
         <li><strong>2–3</strong><span>раза в неделю</span></li>
       </ul>
+      <a class="btn btn--big js-cta learning__cta" href="#form" data-cta="learning">Записаться на занятие</a>
     </div>
-    <div class="learning__features">
-      <article class="learning__feature">
-        <span class="learning__visual" aria-hidden="true"><img class="learning__art" src="assets/img/challenge-message.png" width="256" height="256" alt="" loading="lazy"></span>
-        <h3 class="h3">Больше разговорной практики</h3>
-        <p>Работаем в парах и подгруппах: каждый успевает поговорить, потренировать новые слова и закрепить изученное.</p>
-      </article>
-      <article class="learning__feature">
-        <span class="learning__visual" aria-hidden="true"><img class="learning__art" src="assets/img/learning-materials.png" width="256" height="256" alt="" loading="lazy"></span>
-        <h3 class="h3">Материалы после каждого урока</h3>
-        <p>Готовим и присылаем материалы и словари после каждого занятия — для повторения и самостоятельной практики.</p>
-      </article>
-      <article class="learning__feature">
-        <span class="learning__visual" aria-hidden="true"><img class="learning__art" src="assets/img/learning-online.png" width="256" height="256" alt="" loading="lazy"></span>
-        <h3 class="h3">Обратная связь от преподавателя</h3>
-        <p>Преподаватель проверяет домашние задания и помогает понять, что уже получается, а что стоит повторить.</p>
-      </article>
-      <article class="learning__feature">
-        <span class="learning__visual" aria-hidden="true"><img class="learning__art" src="assets/img/learning-weekly.png" width="256" height="256" alt="" loading="lazy"></span>
-        <h3 class="h3">Каждую неделю — встреча с носителем</h3>
-        <p>Языковой клуб или открытая лекция для каждого студента: больше практики китайского и знакомства с культурой.</p>
-      </article>
+    <div class="learning__carousel">
+      <ul class="learning__track" id="learning-track" tabindex="0" aria-label="Как проходят занятия: карточки, листаются по горизонтали">
+        <li class="lslide lslide--rose lslide--photo">
+          <h3 class="lslide__title">Больше разговорной практики</h3>
+          <p class="lslide__text">На каждом занятии у тебя есть время говорить. Делимся на пары и мини-группы и разыгрываем диалоги из жизни: заказать еду, спросить дорогу, договориться о встрече. Новые слова сразу пробуешь в разговоре.</p>
+          <div class="lslide__sheet lslide__sheet--full"><img src="assets/img/lesson-online-class.webp" width="1672" height="941" alt="Онлайн-занятие школы: преподаватель объясняет тоны, ученики на связи" loading="lazy"></div>
+        </li>
+        <li class="lslide lslide--white">
+          <h3 class="lslide__title">Материалы после каждого урока</h3>
+          <p class="lslide__text">Готовим и присылаем материалы и словари после каждого занятия — для повторения и самостоятельной практики.</p>
+          <div class="lslide__sheet lslide__sheet--stack"><img class="lstack__item lstack__item--left" src="assets/img/lesson-dialog.webp" width="1000" height="871" alt="Материал урока: диалог уровня HSK 2 с переводом и новыми словами" loading="lazy"><img class="lstack__item lstack__item--right" src="assets/img/lesson-numbers.webp" width="1000" height="724" alt="Материал урока: числа по-китайски, уровень HSK 1" loading="lazy"><img class="lstack__item lstack__item--front" src="assets/img/lesson-warmup.webp" width="1000" height="667" alt="Материал урока: разминка — соедини китайское слово с картинкой" loading="lazy"></div>
+        </li>
+        <li class="lslide lslide--steel lslide--wide">
+          <h3 class="lslide__title">Обратная связь от преподавателя</h3>
+          <p class="lslide__text">Преподаватель проверяет домашние задания: показывает правильный вариант, объясняет ошибку в письменном или голосовом комментарии и отмечает, что уже получается, а что стоит повторить.</p>
+          <div class="lslide__sheet lslide__sheet--fit"><img src="assets/img/lesson-feedback.webp" width="902" height="658" alt="Пример обратной связи: ответ ученика и правильный вариант, комментарий преподавателя, что получилось и что повторить, голосовой комментарий" loading="lazy"></div>
+        </li>
+        <li class="lslide lslide--lamp lslide--wide">
+          <h3 class="lslide__title">Каждую неделю — встреча с носителем</h3>
+          <p class="lslide__text">Языковой клуб или открытая лекция для каждого студента: больше практики китайского и знакомства с культурой.</p>
+          <div class="lslide__sheet lslide__sheet--fit"><img src="assets/img/lesson-club.webp" width="1200" height="900" alt="Языковой клуб: носитель китайского ведёт онлайн-встречу со студентами" loading="lazy"></div>
+        </li>
+      </ul>
+      <div class="learning__nav">
+        <button class="learning__arrow" type="button" data-dir="-1" aria-label="Предыдущая карточка" aria-controls="learning-track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6"/></svg></button>
+        <button class="learning__arrow" type="button" data-dir="1" aria-label="Следующая карточка" aria-controls="learning-track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg></button>
+      </div>
     </div>
   </div>
 </section>
@@ -520,6 +527,6 @@
 
 <script src="site.config.js?v=2"></script>
 <script src="assets/js/qrcode.js?v=2"></script>
-<script src="assets/js/main.js?v=5"></script>
+<script src="assets/js/main.js?v=6"></script>
 </body>
 </html>
