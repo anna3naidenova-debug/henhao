@@ -178,6 +178,18 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .cutout--b .cutout__zh { color: var(--red); }
 .tape { position: absolute; top: 10px; right: 12%; width: 90px; height: 26px; background: rgba(221,223,218,.75); transform: rotate(8deg); }
 .whom__note { margin-top: 10px; transform: rotate(-2deg); font-size: 26px; }
+/* Телефон: иероглиф — небольшая плашка слева, текст справа. Десктоп не затрагивается */
+@media (max-width: 899px) {
+  .whom { gap: 28px; margin-top: 20px; }
+  .whom__card { display: grid; grid-template-columns: 104px minmax(0, 1fr); column-gap: 16px; align-items: start; }
+  .whom__card > * { grid-column: 2; }
+  .whom__card .cutout { grid-column: 1; grid-row: 1 / span 3; aspect-ratio: 1 / 1; }
+  .whom__card .cutout__zh { font-size: 44px; }
+  .whom__card .tape { top: 4px; right: 10%; width: 40px; height: 13px; }
+  .whom__note { margin-top: 0; font-size: 22px; }
+  .whom__card .h3 { margin-top: 6px; }
+  .whom__card p { margin-top: 6px; }
+}
 @media (min-width: 900px) {
   .whom { grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .whom__card:nth-child(2) { margin-top: 64px; }
@@ -258,6 +270,12 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .track__item.is-future .track__status { color: #9a9a9a; }
 .track__note { margin: 16px 0 0; font-size: 15px; }
 .track__note:first-of-type { padding-top: 16px; border-top: 2px dashed var(--black); }
+/* Телефон: гусь-курьер маленький, справа от заголовка. Десктоп не затрагивается */
+@media (max-width: 899px) {
+  .path__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .path__head .h2 { min-width: 0; }
+  .path__goose { flex: none; width: 30%; max-width: 150px; margin: 0 0 8px; }
+}
 @media (min-width: 900px) {
   .path__head { grid-column: 1 / span 5; }
   .track { grid-column: 7 / -1; padding: 32px; }
@@ -372,6 +390,22 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 }
 @keyframes teacher-profile-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @media (prefers-reduced-motion: reduce) { .teacher-profile[open] { animation: none; } }
+/* Телефон: компактная карточка — маленькое фото слева, имя и опыт справа, подробности под ними. Десктоп не затрагивается */
+@media (max-width: 519px) {
+  .teachers__grid { gap: 14px; margin-top: 20px; }
+  .teacher-card { display: grid; grid-template-columns: 104px minmax(0, 1fr); column-gap: 14px; align-items: start; padding: 14px; }
+  .teacher-card__photo { grid-column: 1; grid-row: 1 / span 4; border: 2px solid var(--black); }
+  .teacher-card__placeholder { gap: 6px; padding: 8px; }
+  .teacher-card__placeholder span { font-size: 16px; }
+  .teacher-card__body { display: contents; }
+  .teacher-card__body > * { grid-column: 2; }
+  .teacher-card__body .h3 { font-size: 18px; }
+  .teacher-card__role { min-height: 0; margin: 4px 0 8px; }
+  .teacher-card__experience { margin-bottom: 4px; }
+  .teacher-card__credential { margin-bottom: 0; }
+  .teacher-card .teacher-card__details, .teacher-card .teacher-card__about { grid-column: 1 / -1; margin-top: 12px; }
+  .teacher-card .teacher-card__details { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 12px; }
+}
 @media (min-width: 520px) {
   .teachers__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -547,6 +581,11 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .qa[open] summary::after { transform: rotate(45deg); }
 .qa p { margin: 0 0 22px; max-width: 40em; }
 .qa__cta { max-width: 100%; margin-bottom: 22px; text-align: center; }
+/* Телефон: гусь маленький, справа от заголовка, стоит на линии списка и не отодвигает вопросы. Десктоп не затрагивается */
+@media (max-width: 899px) {
+  .faq__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .faq__goose { flex: none; width: 54px; margin: -44px 8px 0 0; }
+}
 @media (min-width: 900px) {
   .faq__head { grid-column: 1 / span 4; }
   .faq__goose { width: 160px; margin-top: 16px; }
