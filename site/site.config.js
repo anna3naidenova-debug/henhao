@@ -74,7 +74,7 @@ window.SITE = {
   contacts: {
     telegram: "https://t.me/naidenovaann",
     telegramNick: "@naidenovaann",
-    wechatId: "henhaoschool",
+    wechatId: "Anna-Naid",
     wechatQr: "assets/img/wechat-qr.png",     // QR из WeChat
     email: "hellohenhaoschool@gmail.com"
   },
