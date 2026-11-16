@@ -1,12 +1,23 @@
 import http from 'node:http';
 import { createReadStream } from 'node:fs';
-import { appendFile, mkdir, realpath, stat } from 'node:fs/promises';
+import { readFile, realpath, stat } from 'node:fs/promises';
+import { createHash, randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isIP } from 'node:net';
+import { createLeadStore } from './lib/lead-store.mjs';
 
 const siteRoot = await realpath(fileURLToPath(new URL('./site/', import.meta.url)));
 const leadsFile = path.resolve(process.env.LEADS_FILE || '/data/leads.jsonl');
+const leadStore = createLeadStore(leadsFile, siteRoot);
+const legalManifest = JSON.parse(await readFile(path.join(siteRoot, 'legal-manifest.json'), 'utf8'));
+const legal = legalManifest.consent;
+const privacy = legalManifest.privacy;
+for (const document of [legal, privacy]) {
+  const pageHash = createHash('sha256').update(await readFile(path.join(siteRoot, document.url))).digest('hex');
+  if (pageHash !== document.html_sha256) throw new Error('Legal page does not match legal manifest; rebuild legal documents');
+}
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const port = Number(process.env.PORT ?? 80);
 const clean = (v, max = 300) => String(v ?? '').replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, max);
 const mime = {
@@ -55,6 +66,9 @@ async function telegram(lead) {
     'Новая заявка: связаться с менеджером', `Имя: ${lead.name}`, `E-mail: ${lead.email}`,
     `Телефон: ${lead.phone}`, lead.telegram && `Telegram: ${lead.telegram}`,
     `Кнопка: ${lead.cta_source}`, utm && `UTM: ${utm}`, `Время заявки: ${cnTime} (Китай)`,
+    'До оплаты направьте клиенту индивидуальные условия: название пакета, число и длительность занятий, полную стоимость, расписание с часовым поясом и состав услуг.',
+    'Оферта (разделы 6–7: переносы, отмены и возвраты): https://henhaoschool.ru/offer.html',
+    'Сведения об исполнителе: https://henhaoschool.ru/requisites.html',
   ].filter(Boolean);
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
@@ -81,6 +95,10 @@ async function lead(req, res) {
   if (Number(req.headers['content-length']) > 10 * 1024) {
     req.resume();
     return json(res, 413, { ok: false, error: 'Body too large' });
+  }
+  const origin = req.headers.origin;
+  if (origin && origin !== `https://${req.headers.host}` && origin !== `http://${req.headers.host}`) {
+    return json(res, 403, { ok: false, error: 'Invalid origin' });
   }
   const ip = clientIP(req);
   const now = Date.now();
@@ -110,19 +128,54 @@ async function lead(req, res) {
   } catch {
     return json(res, 400, { ok: false, error: 'Invalid JSON' });
   }
+  if (d.consent !== true) return json(res, 400, { ok: false, error: 'Consent required' });
+  if (d.consent_document_id !== legal.document_id || d.consent_version !== legal.version) {
+    return json(res, 409, { ok: false, error: 'Consent document changed', code: 'CONSENT_VERSION_CHANGED' });
+  }
+  if (d.privacy_acknowledged !== true) return json(res, 400, { ok: false, error: 'Privacy acknowledgement required' });
+  if (d.privacy_document_id !== privacy.document_id || d.privacy_version !== privacy.version) {
+    return json(res, 409, { ok: false, error: 'Privacy document changed', code: 'PRIVACY_VERSION_CHANGED' });
+  }
+  if (typeof d.request_id !== 'string' || !uuid.test(d.request_id)) {
+    return json(res, 400, { ok: false, error: 'Valid request ID required' });
+  }
   const elapsed = Number(d.elapsed);
-  if (d.website || !Number.isFinite(elapsed) || elapsed < 3) return json(res, 200, { ok: true });
-  if (!clean(d.name) || !clean(d.phone)) return json(res, 400, { ok: false, error: 'Name and phone required' });
+  if (d.website || !Number.isFinite(elapsed) || elapsed < 3) {
+    return json(res, 422, { ok: false, error: 'Please retry after completing the form' });
+  }
+  if (!clean(d.name) || clean(d.phone).replace(/\D/g, '').length < 6 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean(d.email, 120))) {
+    return json(res, 400, { ok: false, error: 'Valid name, email and phone required' });
+  }
 
   const fields = { name: 100, phone: 80, email: 120, telegram: 80, cta_source: 60, browser_tz: 60, page: 200,
     utm_source: 100, utm_medium: 100, utm_campaign: 100, utm_content: 100, utm_term: 100 };
   const saved = Object.fromEntries(Object.entries(fields).map(([key, max]) => [key, clean(d[key], max)]));
+  saved.payload_sha256 = createHash('sha256').update(JSON.stringify({ ...saved,
+    consent: true, document_id: legal.document_id, version: legal.version,
+    privacy_acknowledged: true, privacy_document_id: privacy.document_id, privacy_version: privacy.version,
+  })).digest('hex');
+  saved.request_id = d.request_id;
+  saved.lead_id = randomUUID();
   const sentAt = new Date(d.sent_at || now);
   saved.sent_at = Number.isNaN(sentAt.getTime()) ? new Date(now).toISOString() : sentAt.toISOString();
-  saved.received_at = new Date(now).toISOString();
+  saved.received_at = new Date().toISOString();
+  saved.consent = {
+    consent_id: randomUUID(), event_id: randomUUID(), lead_id: saved.lead_id,
+    document_id: legal.document_id, document_url: legal.url, document_version: legal.version,
+    document_sha256: legal.html_sha256, accepted: true, checkbox_checked: true,
+    method: 'separate_checkbox', recorded_at: saved.received_at, timezone: 'UTC',
+  };
+  saved.privacy_acknowledgement = {
+    event_id: randomUUID(), lead_id: saved.lead_id,
+    document_id: privacy.document_id, document_url: privacy.url, document_version: privacy.version,
+    document_sha256: privacy.html_sha256, acknowledged: true, checkbox_checked: true,
+    method: 'separate_checkbox', recorded_at: saved.received_at, timezone: 'UTC',
+  };
   try {
-    await mkdir(path.dirname(leadsFile), { recursive: true });
-    await appendFile(leadsFile, JSON.stringify(saved) + '\n', { encoding: 'utf8', mode: 0o600, flush: true });
+    const result = await leadStore.save(saved);
+    if (result.conflict) return json(res, 409, { ok: false, error: 'Request ID already used for different data' });
+    if (result.duplicate) return json(res, 200, { ok: true });
   } catch (error) {
     console.error('Lead storage failed:', error.code || 'unknown');
     return json(res, 500, { ok: false, error: 'Could not save lead' });

@@ -603,6 +603,8 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .seal { width: 64px; height: 64px; display: grid; place-items: center; background: var(--red); color: var(--white); font-size: 40px; font-weight: 900; border-radius: 6px; transform: rotate(-8deg); box-shadow: inset 0 0 0 3px rgba(255,255,255,.35); }
 .lead-form { padding: 8px 20px 28px; }
 .field { border: 0; margin: 0; padding: 20px 0; border-bottom: 1px dashed #bdbdbd; min-width: 0; }
+.field--legal { padding: 6px 0; border-bottom: 0; }
+.field:not(.field--legal) + .field--legal { padding-top: 16px; }
 .field__label { display: block; font-family: var(--f-head); font-weight: 600; font-size: 16px; margin-bottom: 12px; padding: 0; }
 .opt { font-family: var(--f-body); font-weight: 400; font-size: 14px; color: var(--grey); margin-left: 6px; }
 .input { width: 100%; min-height: 52px; padding: 12px 14px; font: inherit; border: 2px solid var(--black); border-radius: 0; background: var(--white); color: var(--black); }
@@ -670,7 +672,8 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 .footer__qrs figcaption { font-size: 13px; margin-top: 6px; text-align: center; }
 .qr-real { width: 120px; height: 120px; background: var(--white); padding: 8px; display: grid; place-items: center; color: var(--black); font-size: 12px; text-align: center; line-height: 1.2; }
 .qr-real svg { width: 100%; height: 100%; display: block; }
-.footer__legal { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.35); }
+.footer__legal { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.35); }
+.footer__legal a { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; overflow-wrap: anywhere; text-underline-offset: 3px; }
 @media (min-width: 900px) {
   .footer { padding-bottom: 40px; }
   .footer__grid { grid-template-columns: 1.2fr 1.6fr auto; align-items: start; }
@@ -690,3 +693,13 @@ i[lang="zh-Latn-pinyin"] { font-style: normal; }
 /* ============ СЛУЖЕБНЫЕ СТРАНИЦЫ ============ */
 .page-simple { min-height: 70vh; padding-block: 64px; }
 .page-simple img { width: 200px; margin-bottom: 24px; }
+.legal-page { max-width: 900px; padding-block: clamp(32px, 6vw, 72px); overflow-wrap: anywhere; }
+.legal-page__back { display: inline-block; padding-block: 10px; margin-bottom: 24px; }
+.legal-page h1 { font-family: var(--f-head); font-size: clamp(23px, 4vw, 38px); line-height: 1.25; margin: 0 0 24px; }
+.legal-page h2 { font-family: var(--f-head); font-size: clamp(19px, 2.5vw, 24px); line-height: 1.4; margin: 36px 0 16px; scroll-margin-top: 24px; }
+.legal-page p { margin: 0 0 16px; line-height: 1.75; }
+.legal-page__date { color: var(--grey); }
+.legal-page a { text-underline-offset: 3px; }
+.footer--document { padding-bottom: 40px; }
+.footer--document .footer__name { text-decoration: none; }
+.form-legal-note { font-size: 15px; line-height: 1.6; margin: 16px 0 0; }

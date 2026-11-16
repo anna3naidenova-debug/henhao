@@ -9,26 +9,13 @@
   var fmtPrice = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); };
   var store = {
     get: function (k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
-    set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
-    lget: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-    lset: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   };
 
-  /* ---------- Яндекс Метрика ---------- */
+  /* Analytics integration point. A future consent manager may install an adapter
+     only after opt-in and must remove it on withdrawal. No tracker loads here. */
   function goal(name) {
-    if (S.metrikaId && typeof window.ym === "function") window.ym(S.metrikaId, "reachGoal", name);
-  }
-  if (S.metrikaId) {
-    (function (m, e, t, r, i, k, a) {
-      m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
-      m[i].l = 1 * new Date();
-      k = e.createElement(t); a = e.getElementsByTagName(t)[0]; k.async = 1; k.src = r; a.parentNode.insertBefore(k, a);
-    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-    window.ym(S.metrikaId, "init", { clickmap: true, trackLinks: true, accurateTrackBounce: true });
-    if (!store.lget("cookieOk")) {
-      $("#cookie").hidden = false;
-      $("#cookie-ok").addEventListener("click", function () { store.lset("cookieOk", "1"); $("#cookie").hidden = true; });
-    }
+    if (window.henhaoAnalytics && typeof window.henhaoAnalytics.goal === "function") window.henhaoAnalytics.goal(name);
   }
 
   /* ---------- Подстановка значений из конфига ---------- */
@@ -315,6 +302,14 @@
   var form = $("#lead-form");
   var FC = S.form || {};
   var startedAt = Date.now();
+  var sending = false, pendingPayload = null, pendingSignature = "";
+  // A restored page must not restore an earlier checkbox confirmation.
+  function resetConfirmations() {
+    form.elements["consent"].checked = false;
+    form.elements["privacy_acknowledged"].checked = false;
+  }
+  resetConfirmations();
+  window.addEventListener("pageshow", resetConfirmations);
 
   // UTM из ссылки — запоминаем на время сессии
   var utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
@@ -363,6 +358,10 @@
       form.elements["cta_source"].value = a.getAttribute("data-cta") || "direct";
       if (!a.closest(".panel")) goal("click_manager");
       $("#form-success").hidden = true; form.hidden = false;
+      if (form.getAttribute("data-completed") === "true") {
+        resetConfirmations();
+        form.removeAttribute("data-completed");
+      }
       formTitle.textContent = a.getAttribute("data-form-title") || formTitleText;
     });
   });
@@ -378,6 +377,7 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.elements["email"].value.trim())) bad("email");
     if (form.elements["phone"].value.replace(/\D/g, "").length < 6) bad("phone");
     if (!form.elements["consent"].checked) bad("consent");
+    if (!form.elements["privacy_acknowledged"].checked) bad("privacy_acknowledged");
     if (first) { first.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); var inp = first.querySelector("input"); if (inp) inp.focus({ preventScroll: true }); }
     return ok;
   }
@@ -392,6 +392,12 @@
       email: form.elements["email"].value.trim(),
       phone: (c.code && c.code !== "+" ? c.code + " " : "") + num + (c.name ? " (" + c.name + ")" : ""),
       telegram: tgNick,
+      consent: form.elements["consent"].checked === true,
+      consent_document_id: form.getAttribute("data-consent-document-id"),
+      consent_version: form.getAttribute("data-consent-version"),
+      privacy_acknowledged: form.elements["privacy_acknowledged"].checked === true,
+      privacy_document_id: form.getAttribute("data-privacy-document-id"),
+      privacy_version: form.getAttribute("data-privacy-version"),
       browser_tz: (function () { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { return ""; } })(),
       cta_source: form.elements["cta_source"].value,
       website: form.elements["website"].value,
@@ -404,6 +410,8 @@
   }
 
   function success() {
+    pendingPayload = null; pendingSignature = "";
+    form.setAttribute("data-completed", "true");
     form.hidden = true;
     formTitle.textContent = "Заявка у нас, скоро напишем";
     var s = $("#form-success"); s.hidden = false; s.focus();
@@ -412,18 +420,37 @@
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
+    if (sending) return;
     $("#form-error").hidden = true;
     if (!validate()) return;
     var p = payload();
     var btn = $("#form-submit");
-    // ловушка для ботов: тихо «принимаем», но не отправляем
-    if (p.website || p.elapsed < (FC.minFillSeconds || 4)) { success(); return; }
-    btn.disabled = true;
-    var done = function () { btn.disabled = false; };
+    // Keep one ID and identical data when retrying after an uncertain response.
+    var signatureData = Object.assign({}, p);
+    delete signatureData.sent_at; delete signatureData.elapsed;
+    var signature = JSON.stringify(signatureData);
+    if (!pendingPayload || signature !== pendingSignature) {
+      p.request_id = crypto.randomUUID();
+      pendingPayload = p; pendingSignature = signature;
+    }
+    p = pendingPayload;
+    p.elapsed = Math.round((Date.now() - startedAt) / 1000);
+    sending = true; btn.disabled = true;
+    var done = function () { sending = false; btn.disabled = false; };
     if (FC.demoMode) { setTimeout(function () { done(); success(); }, 500); return; }
-    fetch(FC.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); done(); success(); })
-      .catch(function () { done(); $("#form-error").hidden = false; });
+    var controller = new AbortController();
+    var timeout = setTimeout(function () { controller.abort(); }, 40000);
+    fetch(FC.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p), signal: controller.signal })
+      .then(function (r) { return r.json().then(function (result) {
+        if (result.code === "CONSENT_VERSION_CHANGED" || result.code === "PRIVACY_VERSION_CHANGED") {
+          resetConfirmations();
+          $("#form-error-message").textContent = "Юридические документы обновились. Сохрани введённые данные и обнови страницу, чтобы ознакомиться с новыми текстами и подтвердить отметки.";
+        }
+        if (!r.ok || result.ok !== true) throw new Error(r.status);
+        done(); success();
+      }); })
+      .catch(function () { done(); $("#form-error").hidden = false; })
+      .finally(function () { clearTimeout(timeout); });
   });
 
   /* ---------- Нижняя плашка и цели просмотра ---------- */

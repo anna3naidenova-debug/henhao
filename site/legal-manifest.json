@@ -1,0 +1,34 @@
+{
+  "privacy": {
+    "document_id": "henhao-privacy",
+    "version": "2026-11-16",
+    "url": "/privacy.html",
+    "html_sha256": "b1c42f61c64c3fede6a9e9571c31023aab824f676af7051e15c4f908e9644cc3",
+    "source_sha256": "19e03b5dc08cfacc471f9f26c687c5117bbd58b479be3abd0b931dc96624b412",
+    "text_sha256": "963a5dad42c6133d4ca7ebee97758c6970ace56d9a4c6b25d8b2afc3000df64a"
+  },
+  "consent": {
+    "document_id": "henhao-consent",
+    "version": "2026-11-16",
+    "url": "/consent.html",
+    "html_sha256": "0fff08c6cca42fb3986d9f492c0d6892a9c42afca5761020ff002674b47bcc11",
+    "source_sha256": "e7a1926227f5c85e2c8e10cf5fd629961fcac22e00c311c79ee4ed73ca53cfd2",
+    "text_sha256": "18287a1dd8e6fe51a0a2068c65dcb602d540ccdd1dac86b40d3936b4b3e05965"
+  },
+  "offer": {
+    "document_id": "henhao-offer",
+    "version": "2026-11-16",
+    "url": "/offer.html",
+    "html_sha256": "e33a6e111acb240d4d3e78039e54256172609a554c154a8ff851c9ce17ded4d9",
+    "source_sha256": "004f1d32d116fbfd83c7deb9808d42ee86a8bd81fd8779299cbeec1658447b26",
+    "text_sha256": "a8fa551c5ef58a42c2fc865e1d678460d7106f0db018ebf70d789df8b2ecec0c"
+  },
+  "requisites": {
+    "document_id": "henhao-requisites",
+    "version": "source-2026-11-16",
+    "url": "/requisites.html",
+    "html_sha256": "5a5c126cea8fceb98cedf06e297d2595340d1a8efcfe3b439f1e91a9d42b80d9",
+    "source_sha256": "bb65e1e8cc6089fbc70af2e2e63b5f74c6276290a6d4c4ae25ff50f8ffacf998",
+    "text_sha256": "69d5a89b50cb12aef511ed786616f6b66b8933a988ff40be064a0c396730ef04"
+  }
+}

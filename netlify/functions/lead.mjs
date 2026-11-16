@@ -1,51 +1,6 @@
-// Принимает заявку с сайта и отправляет её в Telegram.
-// Переменные окружения (Netlify → Site configuration → Environment variables):
-//   TELEGRAM_BOT_TOKEN — токен бота от @BotFather
-//   TELEGRAM_CHAT_ID   — id чата, куда слать заявки
-
-const clean = (v, max = 300) => String(v ?? "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, max);
-
-export default async (req) => {
-  if (req.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
-
-  let d;
-  try { d = await req.json(); } catch { return new Response("Bad Request", { status: 400 }); }
-
-  // ловушка для ботов и слишком быстрое заполнение — молча отвечаем «ок»
-  if (d.website || Number(d.elapsed) < 3) return Response.json({ ok: true });
-  if (!clean(d.name) || !clean(d.phone)) return new Response("Bad Request", { status: 400 });
-
-  const sentAt = new Date(d.sent_at || Date.now());
-  const cnTime = new Intl.DateTimeFormat("ru-RU", {
-    timeZone: "Asia/Shanghai", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit"
-  }).format(sentAt).replace(",", "");
-
-  const utm = ["source", "medium", "campaign", "content"]
-    .filter((k) => d["utm_" + k])
-    .map((k) => `${k}=${clean(d["utm_" + k], 100)}`)
-    .join(" / ");
-
-  const lines = [
-    "Новая заявка: связаться с менеджером",
-    `Имя: ${clean(d.name, 100)}`,
-    `E-mail: ${clean(d.email, 120)}`,
-    `Телефон: ${clean(d.phone, 80)}`,
-    d.telegram && `Telegram: ${clean(d.telegram, 80)}`,
-    `Кнопка: ${clean(d.cta_source, 60)}`,
-    utm && `UTM: ${utm}`,
-    `Время заявки: ${cnTime} (Китай)`
-  ].filter(Boolean);
-
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chat = process.env.TELEGRAM_CHAT_ID;
-  console.log("lead", JSON.stringify({ lines, browser_tz: clean(d.browser_tz, 60), page: clean(d.page, 200) })); // копия в логах функции на случай сбоя бота
-  if (!token || !chat) return new Response("Bot is not configured", { status: 500 });
-
-  const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: chat, text: lines.join("\n"), disable_web_page_preview: true })
-  });
-  if (!r.ok) return new Response("Telegram error", { status: 502 });
-  return Response.json({ ok: true });
-};
+// Historical Netlify endpoint. Production uses server.mjs on Amvera.
+// Fail closed: this legacy deployment has no durable consent/application store.
+export default async () => Response.json(
+  { ok: false, error: 'This endpoint is disabled. Use the configured Amvera application.' },
+  { status: 410, headers: { 'Cache-Control': 'no-store' } },
+);
